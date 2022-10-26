@@ -10,15 +10,17 @@ int main()
 	// std::stack<int> a(s);
 	// std::cout << a.top();
 
+	// ft::stack<int> s;
+	// s.push(5);
 
+	// ft::stack<int> a(s);
+	// // std::cout << a.top();
 
-	ft::stack<int> s;
-	s.push(5);
+	// std::cout << (s == a) << (s > a);
 
-	ft::stack<int> a(s);
-	// std::cout << a.top();
+	int a;
+	int *p = new int();
 
-	std::cout << (s == a) << (s > a);
-
+	std::cout << a;
 	return 0;
 }

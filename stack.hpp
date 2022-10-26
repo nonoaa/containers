@@ -5,21 +5,21 @@
 
 namespace ft
 {
-	template <class _T, class _Container = std::vector<_T> >
+	template <class T, class Container = std::vector<T> >
 	class stack
 	{
 	public:
-		// Vector<_T>
-		typedef _Container									container_type;
-		// _T
+		// Vector<T>
+		typedef Container									container_type;
+		// T
 		typedef typename container_type::value_type			value_type;
 		// size_t
 		typedef typename container_type::size_type			size_type;
 
 		// C++11
-		// // _T&
+		// // T&
 		// typedef typename container_type::reference			reference;
-		// // const _T&
+		// // const T&
 		// typedef typename container_type::const_reference	const_reference;
 
 		stack() : c() {}
@@ -93,7 +93,7 @@ namespace ft
 		}
 
 	protected:
-		_Container c;
+		Container c;
 	};
 }
 
