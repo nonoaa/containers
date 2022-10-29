@@ -60,5 +60,30 @@
 	+ 일반적으로 특성정보는 구조체로 구현하나, 이를 특성정보(traits) 클래스라 부른다.
 	+ 특성정보는 기본제공 타입에 대해서 쓸 수 있어야 한다.
 + traits를 활용하여 컴파일 도중에 인자로 넘어온 iterator에 맞는 함수를 실행할 수 있다.
++ iterator_traits\<T*\>:포인터는 산술 연산이 가능하므로 random_access_iterator_tag를 지정해준다.
 
-## 
+## 기타
+
+### operator->() 를 오버로딩할 때 일어나는 현상 및 주의점
++ operator->() 를 오버로딩하고 화살표 연산자(arrow operator)에 의해 operator->() 가 호출될 경우 자동적으로 -> 가 한 번 더 적용된다.
+	+ 다음과 같은 경우 A->A->A->... 로 무한 재귀에 빠져버린다. 그러므로 operator->()를 오버로딩할 때에는 함수가 호출된 클래스 자신을 반환해서는 안 된다. 
+	```cpp
+	struct A
+	{
+		A operator->()
+		{
+			return *this;
+		}
+	};
+	```
+
+### 연산자 오버로딩 시 교환법칙이 성립하도록
++ 클래스 내부에서 멤버함수로 연산자를 오버로딩할 경우 Class + int 는 가능하지만 int + Class는 불가능하다.
+	```cpp
+		template <typename T1, typename T2>
+		bool operator==(const random_access_iterator<T1> &lhs, const random_access_iterator<T2> &rhs)
+		{
+			return lhs._ptr == rhs._ptr;
+		}
+	```
+	+ 위와 같이 비멤버함수로 오버로딩하면 교환법칙이 성립할 수 있다.

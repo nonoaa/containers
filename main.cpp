@@ -5,6 +5,8 @@
 	#include <map>
 	#include <stack>
 	#include <vector>
+	#include <iterator>
+	
 	namespace ft = std;
 #else
 	#include <map.hpp>
