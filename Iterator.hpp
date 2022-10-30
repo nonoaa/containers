@@ -56,6 +56,47 @@ namespace ft
 		typedef random_access_iterator_tag	iterator_category;
 	};
 
+	// Reverse Iterator
+	template<class Iterator>
+	class reverse_iterator
+	{
+	public:
+		typedef Iterator														iterator_type;
+		typedef typename iterator_traits<Iterator>::difference_type				difference_type;
+		typedef typename iterator_traits<Iterator>::value_type					value_type;
+		typedef typename iterator_traits<Iterator>::pointer						pointer;
+		typedef typename iterator_traits<Iterator>::reference					reference;
+		typedef typename iterator_traits<Iterator>::iterator_category			iterator_category;
+
+		reverse_iterator() : _iter(iterator_type()) {};
+		explicit reverse_iterator(iterator_type it) : _iter(it) {};
+		template<class Iter>
+		reverse_iterator(const reverse_iterator<Iter> &src) : _iter(src._iter) {};
+
+		template<class Iter>
+		reverse_iterator &operator=(const reverse_iterator<Iter> &src)
+		{
+			_iter = src._iter;
+			return *this;
+		}
+
+		~reverse_iterator();
+
+		reference operator*() const
+		{
+			Iterator tmp(_iter);
+			return *--tmp;
+		}
+
+		pointer operator->() const
+		{
+			return &(operator*());
+		}
+
+
+	protected:
+		Iterator	_iter;
+	};
 
 	// Random Access Iterator
 	template<typename T>
@@ -87,7 +128,7 @@ namespace ft
 
 		pointer operator->() const
 		{
-			return _ptr;
+			return &(operator*());
 		}
 
 		reference operator[] (difference_type n) const
@@ -169,7 +210,7 @@ namespace ft
 		friend bool operator>=(const random_access_iterator<T1> &lhs, const random_access_iterator<T2> &rhs);
 
 	protected:
-		pointer _ptr;
+		pointer	_ptr;
 	};
 
 	template<typename T>
