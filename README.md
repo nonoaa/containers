@@ -1,6 +1,36 @@
 # containers
 + C++ STL의 컨테이너들을 직접 구현하며 학습한 내용
 
+## Template Meta Programming (TMP)
++ 템플릿을 사용하면 객체를 생성하지 않더라도 타입에 대한 어떠한 값을 부여할 수 있고, 또 그타입을 가지고 연산을 할 수가 있다.
+
+## SFINAE(Substitution Failure Is Not An Error: 치환 실패는 오류가 아니다)
++ 템플릿 인자 치환에 실패할 경우 컴파일러는 이 오류를 무시하고, 그냥 오버로딩 후보에서 제외하면 된다.
+	```cpp
+	template <typename T>
+	void negate(const T& t) {
+		typename T::value_type n = -t();
+	}
+	```
++ 위의 경우 함수내부의 T::value_type 때문에 컴파일 오류가 발생한다.
+	```cpp
+	template <typename T>
+	void negate(const T& t, typename T::value_type n = -t()) { }
+	```
++ 컴파일 오류를 발생시키지 않기 위해서는 함수의 선언부에 타입 치환 오류를 발생시켜서 오버로딩 후보군에서 제외시켜야 한다.
+	### enable_if
+	+ SFINAE를 잘 활용하는 툴들 중 가장 널리 쓰이는 것이 enable_if이다.
+		```cpp
+		// enalbe_if의 정의
+		template <bool B, typename T = void>
+		struct enable_if {};
+
+		template <typename T>
+		struct enable_if<true, T> {
+			typedef T type;
+		};
+		```
+
 ## Allocator
 + 메모리 관리를 좀 더 세밀하게 컨트롤하고 유연하고 효율적으로 사용해야할 때 (주로 라이브러리를 작성할 때, 특히 표준 라이브러리의 컨테이너를 구현할 때) 많이 사용된다.
 + new 연산자는 값의 초기화를 진행하기 때문에 초기화되지 않은 공간으로 메모리 할당을 하는 Allocator에 비해 자원 소모량이 크다.

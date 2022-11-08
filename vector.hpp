@@ -2,6 +2,7 @@
 #define VECTOR_HPP
 
 #include "iterator.hpp"
+#include "type_traits.hpp"
 #include <memory>
 
 namespace ft
@@ -23,32 +24,237 @@ namespace ft
 		typedef typename allocator_type::difference_type		difference_type;
 		typedef typename allocator_type::size_type				size_type;
 
-		explicit vector(const allocator_type& alloc = allocator_type()) : _alloc(alloc), _ptr(NULL), _capacity(0), _size(0) {}
+		explicit vector(const allocator_type& alloc = allocator_type()) : _alloc(alloc), _start(NULL), _end(NULL), _end_capacity(NULL) {}
 
 		explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type())
-			: _alloc(alloc), _ptr(NULL), _capacity(n), _size(n)
+			: _alloc(alloc)
 		{
-			_ptr = _alloc.allocate(n);
-			for (size_type i = 0; i < n; i++)
+			_start = _alloc.allocate(n);
+			_end = _start;
+			_end_capacity = _start + n;
+			while(n--)
 			{
-				_alloc.construct(_ptr + i, val);
+				_alloc.construct(_end++, val);
 			}
 		}
 
 		template <class InputIterator>
-		vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type())
+		vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
+			typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 			: _alloc(alloc)
 		{
+			difference_type n = last - first;
+			_start = _alloc.allocate(n);
+			_end = _start;
+			_end_capacity = _start + n;
+			while(n--)
+			{
+				_alloc.construct(_end++ , *first++);
+			}
+		}
 
+		vector(const vector& src) : _alloc(src._alloc)
+		{
+			size_type n = src.size();
+			_start = _alloc.allocate(n);
+			_end = _start;
+			_end_capacity = _start + n;
+			pointer src_start = src._start;
+			while (n--)
+			{
+				_alloc.construct(_end++, *src_start++);
+			}
+		}
+
+		vector& operator=(const vector& src)
+		{
+			if (*this != src)
+			{
+				clear();
+				_alloc.deallocate(_start, capacity());
+				size_type n = src.size();
+				_start = _alloc.allocate(n);
+				_end = _start;
+				_end_capacity = _start + n;
+				pointer src_start = src._start;
+				while (n--)
+				{
+					_alloc.construct(_end++, *src_start++);
+				}
+			}
+			return *this;
+		}
+
+		~vector()
+		{
+			clear();
+			_alloc.deallocate(_start, capacity());
+		}
+
+		// iterators
+		iterator begin()
+		{
+			return iterator(_start);
+		}
+
+		const_iterator begin() const
+		{
+			return const_iterator(_start);
+		}
+
+		iterator end()
+		{
+			return iterator(_end);
+		}
+
+		const_iterator end() const
+		{
+			return const_iterator(_end);
+		}
+
+		reverse_iterator rbegin()
+		{
+			return reverse_iterator(end());
+		}
+
+		const_reverse_iterator rbegin() const
+		{
+			return const_reverse_iterator(end());
+		} 
+
+		reverse_iterator rend()
+		{
+			return reverse_iterator(begin());
+		}
+
+		const_reverse_iterator rend() const
+		{
+			return const_reverse_iterator(begin());
+		}
+
+
+
+		size_type size() const
+		{
+			return size_type(end() - begin());
+		}
+
+		size_type max_size() const
+		{
+			return _alloc.max_size();
+		}
+
+
+		void resize(size_type n, value_type val = value_type())
+		{
+			if (n > max_size())
+			{
+				throw std::out_of_range("ft::vector");
+			}
+			if (n < size())
+			{
+				erase(begin() + n, end());
+			}
+			else
+			{
+				insert(end(), n - size(), val);
+			}
+		}
+
+		size_type capacity() const
+		{
+			return size_type(_end_capacity - _start);
+		}
+
+		bool empty() const
+		{
+			return begin() == end();
+		}
+
+		void reserve(size_type n)
+		{
+			if (n > max_size())
+			{
+				throw std::out_of_range("ft::vector");
+			}
+			if (capacity() >= n)
+			{
+				return ;
+			}
+
+			pointer prev_start = _start;
+			pointer prev_end = _end;
+			size_type prev_capacity = capacity();
+
+			_start = _alloc.allocate(n);
+			_end = _start;
+			_end_capacity = _start + n;
+
+			for(pointer it = prev_start; it != prev_end; it++)
+			{
+				_alloc.construct(_end++, *it);
+			}
+			for(pointer it = prev_start; it != prev_end; it++)
+			{
+				_alloc.destroy(it);
+			}
+			_alloc.deallocate(prev_start, prev_capacity);
+		}
+
+		reference operator[](size_type n)
+		{
+			return *(begin() + n);
+		}
+
+		const_reference operator[](size_type n) const
+		{
+			return *(begin() + n);
+		}
+
+		reference at(size type n)
+		{
+			if (n >= size())
+			{
+				throw std::out_of_range("ft::vector");
+			}
+			return (*this)[n];
+		}
+
+		const reference at(size type n) const
+		{
+			if (n >= size())
+			{
+				throw std::out_of_range("ft::vector");
+			}
+			return (*this)[n];
+		}
+
+		reference front()
+		{
+			return *begin();
+		}
+
+		const_reference front() const
+		{
+			return *begin();
+		}
+
+		reference back()
+		{
+			return *(end() - 1);
+		}
+
+		const_reference back() const
+		{
+			return *(end() - 1);
 		}
 
 	private:
 		allocator_type		_alloc;
-		pointer				_ptr;
-		size_type			_capacity; // 할당된 크기
-		size_type			_size; // 실제 들어간 데이터의 개수
+		pointer				_start;
+		pointer				_end;
+		pointer				_end_capacity;
 	};
-
 }
 
 #endif
