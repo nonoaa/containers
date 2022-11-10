@@ -92,6 +92,32 @@
 + traits를 활용하여 컴파일 도중에 인자로 넘어온 iterator에 맞는 함수를 실행할 수 있다.
 + iterator_traits\<T*\>:포인터는 산술 연산이 가능하므로 random_access_iterator_tag를 지정해준다.
 
+### vector
++ 멤버함수
+	+ iterator 반환 함수
+		+ begin() : 시작 이터레이터 반환
+		+ end() : 끝 이터레이터 반환
+		+ rbegin() : 시작 reverse 이터레이터 반환 (끝 이터레이터)
+		+ rend() : 끝 reverse 이터레이터 반환 (시작 이터레이터)
+	+ size() : 원소의 개수 반환
+	+ max_size() : 최대 원소 개수 반환
+	+ resize(size_type n, value_type val = value_type()) : 벡터의 사이즈를 n개로 변경한다. n이 현재 사이즈보다 클경우 사이즈를 증가시키고 val로 채운다.
+	+ capacity() : 현재 할당된 공간에 넣을 수 있는 원소의 개수를 반환
+	+ empty() : 벡터가 비어있으면 1, 아니면 0 반환
+	+ reserve() : capacity를 변경한다. 현재 capacity보다 작은 값이 들어오면 아무런 동작도 하지않는다.
+	+ assign
+		+ template \<class InputIterator\> void assign(InputIterator first, InputIterator last) : 원래 벡터의 내용들을 지우고 first 부터 last 바로 직전까지의 원소들을 벡터에 채운다.
+		+ void assign(size_type n, const T& u) : 원래 벡터의 내용들을 지우고 원소 u를 n개 채운다.
+	+ push_back(const value_type &val) : 맨 끝에 원소를 삽입한다.
+	+ pop_back() : 맨 끝 원소를 제거한다.
+	+ insert
+		+ iterator insert(iterator position, const value_type &val) : position 앞에 val을 삽입한다. 삽입된 val의 위치를 반환한다.
+		+ void insert(iterator position, size_type n, const value_type &val) : position 앞에 n개 만큼 val을 삽입한다.
+		+ template <typename InputIterator> void insert(iterator position, InputIterator first, InputIterator last) : position 앞에 first 부터 last까지 삽입한다.
+	+ erase
+		+ iterator erase(iterator position) : position위치의 원소를 삭제한다.
+		+ iterator erase(iterator first, iterator last) : first부터 last 직전까지의 원소를 삭제한다.
+
 ## 기타
 
 ### operator->() 를 오버로딩할 때 일어나는 현상 및 주의점

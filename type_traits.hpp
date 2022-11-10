@@ -4,7 +4,7 @@
 namespace ft
 {
 	// enable_if
-	template <bool B, typname T = void>
+	template <bool B, typename T = void>
 	struct enable_if {};
 
 	template <typename T>
@@ -15,14 +15,14 @@ namespace ft
 		typedef bool value_type;
 		typedef false_type type;
 		static const value_type value = false;
-	}
+	};
 
 	struct true_type
 	{
 		typedef bool value_type;
 		typedef true_type type;
 		static const value_type value = true;
-	}
+	};
 
 	template <class T> struct is_integral : public false_type {};
 

@@ -57,11 +57,6 @@ namespace ft
 			c.pop_back();
 		}
 
-		void swap(stack &s)
-		{
-			c.swap(s.c);
-		}
-
 		bool operator==(const stack& s)
 		{
 			return c == s.c;

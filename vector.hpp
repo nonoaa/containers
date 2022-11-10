@@ -91,7 +91,10 @@ namespace ft
 			_alloc.deallocate(_start, capacity());
 		}
 
-		// iterators
+		/* ============================================================ */
+		/*                       Iterators                              */
+		/* ============================================================ */
+
 		iterator begin()
 		{
 			return iterator(_start);
@@ -132,7 +135,9 @@ namespace ft
 			return const_reverse_iterator(begin());
 		}
 
-
+		/* ============================================================ */
+		/*                       Capacity                               */
+		/* ============================================================ */
 
 		size_type size() const
 		{
@@ -143,7 +148,6 @@ namespace ft
 		{
 			return _alloc.max_size();
 		}
-
 
 		void resize(size_type n, value_type val = value_type())
 		{
@@ -193,13 +197,15 @@ namespace ft
 			for(pointer it = prev_start; it != prev_end; it++)
 			{
 				_alloc.construct(_end++, *it);
-			}
-			for(pointer it = prev_start; it != prev_end; it++)
-			{
 				_alloc.destroy(it);
 			}
 			_alloc.deallocate(prev_start, prev_capacity);
 		}
+
+
+		/* ============================================================ */
+		/*                       Element access                         */
+		/* ============================================================ */
 
 		reference operator[](size_type n)
 		{
@@ -247,6 +253,117 @@ namespace ft
 		const_reference back() const
 		{
 			return *(end() - 1);
+		}
+
+		/* ============================================================ */
+		/*                       Modifiers                              */
+		/* ============================================================ */
+
+		template <class InputIterator>
+		void assign (InputIterator first, InputIterator last,
+			typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
+		{
+			clear();
+			size_type n = last - first;
+			if (capacity() < n)
+			{
+				_alloc.deallocate(_start, capacity());
+				_start = _alloc.allocate(n);
+				_end = _start;
+				_end_capacity = _start + n;
+			}
+			while (n--)
+			{
+				_alloc.construct(_end++, *first++);
+			}
+		}
+
+		void assign(size_type n, const value_type& val)
+		{
+			clear();
+			if (capacity() < n)
+			{
+				_alloc.deallocate(_start, capacity());
+				_start = _alloc.allocate(n);
+				_end = _start;
+				_end_capacity = _start + n;
+			}
+			while (n--)
+			{
+				_alloc.construct(_end++, *first++);
+			}
+		}
+
+		void push_back(const value_type& val)
+		{
+			if (_end == _end_capacity)
+			{
+				empty() ? reserve(1) : reserve(capacity() * 2);
+			}
+			_alloc.construct(_end++, val);
+		}
+
+		void pop_back()
+		{
+			_alloc.destroy(--_end);
+		}
+
+		iterator insert(iterator position, const value_type& val)
+		{
+			size_type n = position - begin();
+			if (_end != _end_capacity && position == end())
+			{
+				_alloc.construct(_end++, val);
+			}
+			else
+			{
+				insert(position, 1, val);
+			}
+			return begin() + n;
+		}
+
+		void insert(iterator position, size_type n, const value_type& val)
+		{
+			reserve(size() + n);
+			size_type pos = position - begin();
+
+			for (size_type i = 1; i <= size() - pos; i++)
+			{
+				_alloc.construct(_end + n - i,  *(_end - i));
+				_alloc.destroy(_end - i);
+			}
+			_end += n;
+			for (size_type i = 0; i < n; i++)
+			{
+				_alloc.construct(_start + pos + i, val);
+			}
+			return ;
+		}
+
+		template <class InputIterator>
+		void insert(iterator position, InputIterator first, InputIterator last,
+			typename ft::enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = NULL)
+		{
+			size_type n = last - first;
+			reserve(size() + n);
+			size_type pos = position - begin();
+
+			for (size_type i = 1; i <= size() - pos; i++)
+			{
+				_alloc.construct(_end + n - i,  *(_end - i));
+				_alloc.destroy(_end - i);
+			}
+			_end += n;
+			for (size_type i = 0; i < n; i++)
+			{
+				_alloc.construct(_start + pos + i, *(first + i));
+			}
+			return ;
+		}
+
+		iterator erase(iterator position)
+		{
+			
 		}
 
 	private:
