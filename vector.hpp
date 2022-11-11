@@ -3,6 +3,7 @@
 
 #include "iterator.hpp"
 #include "type_traits.hpp"
+#include "algorithm.hpp"
 #include <memory>
 
 namespace ft
@@ -217,7 +218,7 @@ namespace ft
 			return *(begin() + n);
 		}
 
-		reference at(size type n)
+		reference at(size_type n)
 		{
 			if (n >= size())
 			{
@@ -226,7 +227,7 @@ namespace ft
 			return (*this)[n];
 		}
 
-		const reference at(size type n) const
+		const reference at(size_type n) const
 		{
 			if (n >= size())
 			{
@@ -290,7 +291,7 @@ namespace ft
 			}
 			while (n--)
 			{
-				_alloc.construct(_end++, *first++);
+				_alloc.construct(_end++, val);
 			}
 		}
 
@@ -363,7 +364,56 @@ namespace ft
 
 		iterator erase(iterator position)
 		{
-			
+			iterator it = position;
+			while (it + 1 != end())
+			{
+				_alloc.destroy(&(*it));
+				_alloc.construct(&(*it), *(it + 1));
+				it++;
+			}
+			_alloc.destroy(&(*it));
+			--_end;
+			return position;
+		}
+
+		iterator erase(iterator first, iterator last)
+		{
+			size_type n = last - first;
+			iterator it = first;
+			while (it + n != end())
+			{
+				_alloc.destroy(&(*it));
+				_alloc.construct(&(*it), *(it + n));
+				++it;
+			}
+			while (it != end())
+			{
+				_alloc.destroy(&(*it));
+				++it;
+			}
+			_end -= n;
+			return first;
+		}
+
+		void swap(vector<T, Allocator>& x)
+		{
+			ft::swap(_alloc, x._alloc);
+			ft::swap(_start, x._start);
+			ft::swap(_end, x._end);
+			ft::swap(_end_capacity, x._end_capacity);
+		}
+
+		void clear()
+		{
+			while (_start != _end)
+			{
+				_alloc.destroy(--_end);
+			}
+		}
+
+		allocator_type get_allocator() const
+		{
+			return _alloc;
 		}
 
 	private:
@@ -372,6 +422,48 @@ namespace ft
 		pointer				_end;
 		pointer				_end_capacity;
 	};
+
+	template <typename T, typename Alloc>
+	inline bool operator==(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+	{
+		return lhs.size() == rhs.size() && ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+	}
+
+	template <typename T, typename Alloc>
+	inline bool operator!=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+	{
+		return !(lhs == rhs);
+	}
+
+	template <typename T, typename Alloc>
+	inline bool operator<(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+	{
+		return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+	}
+
+	template <typename T, typename Alloc>
+	inline bool operator<=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+	{
+		return !(rhs < lhs);
+	}
+
+	template <typename T, typename Alloc>
+	inline bool operator>(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+	{
+		return rhs < lhs;
+	}
+
+	template <typename T, typename Alloc>
+	inline bool operator>=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+	{
+		return !(lhs < rhs);
+	}
+
+	template <typename T, typename Alloc>
+	void swap(vector<T, Alloc>& lhs, vector<T, Alloc>& rhs)
+	{
+		lhs.swap(rhs);
+	}
 }
 
 #endif

@@ -1,11 +1,11 @@
 #ifndef STACK_HPP
 #define STACK_HPP
 
-#include <vector>
+#include "vector.hpp"
 
 namespace ft
 {
-	template <class T, class Container = std::vector<T> >
+	template <class T, class Container = ft::vector<T> >
 	class stack
 	{
 	public:
@@ -22,8 +22,7 @@ namespace ft
 		// // const T&
 		// typedef typename container_type::const_reference	const_reference;
 
-		stack() : c() {}
-		explicit stack(const stack& src) : c(src.c) {}
+		explicit stack(const container_type& cont = container_type()) : c(cont) {}
 		stack &operator=(const stack& src) { c = src.c; return *this; }
 		~stack() {}
 

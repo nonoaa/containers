@@ -80,7 +80,7 @@ namespace ft
 			return *this;
 		}
 
-		~reverse_iterator();
+		~reverse_iterator() {};
 
 		reference operator*() const
 		{
@@ -143,13 +143,11 @@ namespace ft
 
 		reference operator[](difference_type n) const
 		{
-			return *(*this + n)
+			return *(*this + n);
 		}
 
-	template <typename Iterator>
 	friend bool operator==(const reverse_iterator<Iterator> &lhs, const reverse_iterator<Iterator> &rhs);
 
-	template <typename Iterator>
 	friend bool operator<(const reverse_iterator<Iterator> &lhs, const reverse_iterator<Iterator> &rhs);
 
 	protected:
