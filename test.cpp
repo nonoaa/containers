@@ -42,21 +42,70 @@ int main()
 
 	// a.erase(a.end());
 
-	ft::vector<std::string> b(10);
-	for (unsigned long int i = 0; i < b.size(); ++i)
-		b[i] = std::string((b.size() - i), i + 65);
+	// std::vector<int> v1;
+	// ft::vector<int> v2;
+	// for (int i = 0; i < 10; i++)
+	// {
+	// 	int num = rand() % 10;
+	// 	v1.push_back(num);
+	// 	v2.push_back(num);
+	// }
 
-	for (int i = 0; i < b.size(); i++)
+	// for (int i = 0; i < 10; i++)
+	// {
+	// 	std::cout << v1[i] << " " << v2[i] << std::endl;
+	// }
+	// std::cout << std::endl;
+	// // std::cout << v2.size();
+	// v1.resize(500);
+	// v2.resize(500);
+	// std::cout << v2.end() - v2.begin();
+   const size_t N = 42;
+    const int M = std::numeric_limits<int>::max();
+	int count = 100000;
+	srand(time(NULL));
 	{
-		std::cout << b[i] << std::endl;
+	//output test
+	long err_count = 0;
+	for (int i = 0; i < count; ++i){
+		size_t num = rand() % N;
+		std::vector<int> v1;
+		ft::vector<int> v2;
+		for (size_t i = 0; i < num; ++i){
+			int fill = rand() % M;
+			v1.push_back(fill);
+			v2.push_back(fill);
+		}
+		if (!num) continue;
+		size_t it_pos = rand() % num;
+		std::vector<int>::iterator it = v1.begin() + it_pos;
+		ft::vector<int>::iterator its = v2.begin() + it_pos;
+		std::vector<int>::iterator res_std = v1.insert(it, N);
+		ft::vector<int>::iterator res_ft = v2.insert(its, N);
+		if (*res_std != *res_ft)
+		 	++err_count;
+		if (res_std - v1.begin() != res_ft - v2.begin())
+			++err_count;
+		int std_res = v1.size();
+		int ft_res = v2.size();
+		if (std_res != ft_res)
+			++err_count;
+		if (!std::equal(v1.begin(),v1.end(),v2.begin()))
+			++err_count;
+	}
 	}
 
-	std::cout << std::endl;
-	b.erase(b.end() - 1);
-	for (int i = 0; i < b.size(); i++)
-	{
-		std::cout << b[i] << std::endl;
+	//std working
+    std::vector<int> v1(N, M);
+	for (int i = 0; i < count; ++i){
+		v1.insert(v1.begin(), N);
 	}
+	
+	//ft working 
+	// ft::vector<int> v2(N, M);
+	// for (int i = 0; i < count; ++i){
+	// 	v2.insert(v2.begin(), N);
+	// }
 
 
 	// ft::random_access_iterator<T> == ft::vector<T>::iterator

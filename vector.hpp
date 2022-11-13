@@ -6,6 +6,8 @@
 #include "algorithm.hpp"
 #include <memory>
 
+#include <iostream>
+
 namespace ft
 {
 	template <class T, class Allocator = std::allocator<T> >
@@ -152,10 +154,10 @@ namespace ft
 
 		void resize(size_type n, value_type val = value_type())
 		{
-			if (n > max_size())
-			{
-				throw std::out_of_range("ft::vector");
-			}
+			// if (n > max_size())
+			// {
+			// 	throw std::out_of_range("ft::vector");
+			// }
 			if (n < size())
 			{
 				erase(begin() + n, end());
@@ -178,13 +180,13 @@ namespace ft
 
 		void reserve(size_type n)
 		{
-			if (n > max_size())
-			{
-				throw std::out_of_range("ft::vector");
-			}
 			if (capacity() >= n)
 			{
 				return ;
+			}
+			if (n > max_size())
+			{
+				throw std::out_of_range("ft::vector");
 			}
 
 			pointer prev_start = _start;
@@ -322,23 +324,24 @@ namespace ft
 			}
 			return begin() + n;
 		}
-
+		
 		void insert(iterator position, size_type n, const value_type& val)
 		{
-			reserve(size() + n);
-			size_type pos = position - begin();
-
-			for (size_type i = 1; i <= size() - pos; i++)
+			if (n != 0)
 			{
-				_alloc.construct(_end + n - i,  *(_end - i));
-				_alloc.destroy(_end - i);
+				size_type pos = position - begin();
+				reserve(size() + n);
+				for (size_type i = 1; i <= size() - pos; i++)
+				{
+					_alloc.construct(_end + n - i,  *(_end - i));
+					_alloc.destroy(_end - i);
+				}
+				_end += n;
+				for (size_type i = 0; i < n; i++)
+				{
+					_alloc.construct(_start + pos + i, val);
+				}
 			}
-			_end += n;
-			for (size_type i = 0; i < n; i++)
-			{
-				_alloc.construct(_start + pos + i, val);
-			}
-			return ;
 		}
 
 		template <class InputIterator>
@@ -346,20 +349,22 @@ namespace ft
 			typename ft::enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 		{
 			size_type n = last - first;
-			reserve(size() + n);
-			size_type pos = position - begin();
+			if (n != 0)
+			{
+				size_type pos = position - begin();
+				reserve(size() + n);
 
-			for (size_type i = 1; i <= size() - pos; i++)
-			{
-				_alloc.construct(_end + n - i,  *(_end - i));
-				_alloc.destroy(_end - i);
+				for (size_type i = 1; i <= size() - pos; i++)
+				{
+					_alloc.construct(_end + n - i,  *(_end - i));
+					_alloc.destroy(_end - i);
+				}
+				_end += n;
+				for (size_type i = 0; i < n; i++)
+				{
+					_alloc.construct(_start + pos + i, *(first + i));
+				}
 			}
-			_end += n;
-			for (size_type i = 0; i < n; i++)
-			{
-				_alloc.construct(_start + pos + i, *(first + i));
-			}
-			return ;
 		}
 
 		iterator erase(iterator position)
