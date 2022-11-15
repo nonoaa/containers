@@ -327,21 +327,36 @@ namespace ft
 		
 		void insert(iterator position, size_type n, const value_type& val)
 		{
-			if (n != 0)
-			{
-				size_type pos = position - begin();
-				reserve(size() + n);
-				for (size_type i = 1; i <= size() - pos; i++)
-				{
-					_alloc.construct(_end + n - i,  *(_end - i));
-					_alloc.destroy(_end - i);
-				}
-				_end += n;
-				for (size_type i = 0; i < n; i++)
-				{
-					_alloc.construct(_start + pos + i, val);
-				}
-			}
+			// if (n!= 0)
+			// {
+			// 	if (size_type(_end_capacity - _end) >= n)
+			// 	{
+			// 		value_type copy = val;
+			// 		const size_type elems_after = end() - position;
+			// 		iterator prev_end(_end);
+			// 		if (elems_after > _n)
+			// 	}
+			// 	else
+			// 	{
+					
+			// 	}
+			// }
+
+			// if (n != 0)
+			// {
+			// 	size_type pos = position - begin();
+			// 	reserve(size() + n);
+			// 	for (size_type i = 1; i <= size() - pos; i++)
+			// 	{
+			// 		_alloc.construct(_end + n - i,  *(_end - i));
+			// 		_alloc.destroy(_end - i);
+			// 	}
+			// 	_end += n;
+			// 	for (size_type i = 0; i < n; i++)
+			// 	{
+			// 		_alloc.construct(_start + pos + i, val);
+			// 	}
+			// }
 		}
 
 		template <class InputIterator>
@@ -369,14 +384,14 @@ namespace ft
 
 		iterator erase(iterator position)
 		{
-			iterator it = position;
-			while (it + 1 != end())
+			pointer pos = &(*position);
+			while (pos + 1 != _end)
 			{
-				_alloc.destroy(&(*it));
-				_alloc.construct(&(*it), *(it + 1));
-				it++;
+				_alloc.destroy(pos);
+				_alloc.construct(pos, *(pos + 1));
+				++pos;
 			}
-			_alloc.destroy(&(*it));
+			_alloc.destroy(pos);
 			--_end;
 			return position;
 		}
@@ -385,16 +400,17 @@ namespace ft
 		{
 			size_type n = last - first;
 			iterator it = first;
-			while (it + n != end())
+			pointer pos = &(*first);
+			while (pos + n != _end)
 			{
-				_alloc.destroy(&(*it));
-				_alloc.construct(&(*it), *(it + n));
-				++it;
+				_alloc.destroy(pos);
+				_alloc.construct(pos, *(pos + n));
+				++pos;
 			}
-			while (it != end())
+			while (pos != _end)
 			{
-				_alloc.destroy(&(*it));
-				++it;
+				_alloc.destroy(pos);
+				++pos;
 			}
 			_end -= n;
 			return first;
