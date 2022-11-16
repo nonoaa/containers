@@ -1,6 +1,8 @@
 #ifndef ALGORITHM_HPP
 #define ALGORITHM_HPP
 
+#include "iterator.hpp"
+
 namespace ft
 {
 	template <typename T>
@@ -78,6 +80,16 @@ namespace ft
 			++first2;
 		}
 		return (first2 != last2);
+	}
+
+	template <typename InputIterator>
+	typename ft::iterator_traits<InputIterator>::difference_type difference(InputIterator first, InputIterator last)
+	{
+		typename ft::iterator_traits<InputIterator>::difference_type n;
+		n = 0;
+		for (; first != last; first++)
+			n++;
+		return n;
 	}
 }
 

@@ -5,8 +5,7 @@
 #include "type_traits.hpp"
 #include "algorithm.hpp"
 #include <memory>
-
-#include <iostream>
+#include <stdexcept>
 
 namespace ft
 {
@@ -46,7 +45,7 @@ namespace ft
 			typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 			: _alloc(alloc)
 		{
-			difference_type n = last - first;
+			difference_type n = ft::difference(first, last);
 			_start = _alloc.allocate(n);
 			_end = _start;
 			_end_capacity = _start + n;
@@ -229,7 +228,7 @@ namespace ft
 			return (*this)[n];
 		}
 
-		const reference at(size_type n) const
+		const_reference at(size_type n) const
 		{
 			if (n >= size())
 			{
@@ -267,7 +266,7 @@ namespace ft
 			typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 		{
 			clear();
-			size_type n = last - first;
+			size_type n = ft::difference(first, last);
 			if (capacity() < n)
 			{
 				_alloc.deallocate(_start, capacity());
@@ -327,43 +326,28 @@ namespace ft
 		
 		void insert(iterator position, size_type n, const value_type& val)
 		{
-			// if (n!= 0)
-			// {
-			// 	if (size_type(_end_capacity - _end) >= n)
-			// 	{
-			// 		value_type copy = val;
-			// 		const size_type elems_after = end() - position;
-			// 		iterator prev_end(_end);
-			// 		if (elems_after > _n)
-			// 	}
-			// 	else
-			// 	{
-					
-			// 	}
-			// }
-
-			// if (n != 0)
-			// {
-			// 	size_type pos = position - begin();
-			// 	reserve(size() + n);
-			// 	for (size_type i = 1; i <= size() - pos; i++)
-			// 	{
-			// 		_alloc.construct(_end + n - i,  *(_end - i));
-			// 		_alloc.destroy(_end - i);
-			// 	}
-			// 	_end += n;
-			// 	for (size_type i = 0; i < n; i++)
-			// 	{
-			// 		_alloc.construct(_start + pos + i, val);
-			// 	}
-			// }
+			if (n != 0)
+			{
+				size_type pos = position - begin();
+				reserve(size() + n);
+				for (size_type i = 1; i <= size() - pos; i++)
+				{
+					_alloc.construct(_end + n - i,  *(_end - i));
+					_alloc.destroy(_end - i);
+				}
+				_end += n;
+				for (size_type i = 0; i < n; i++)
+				{
+					_alloc.construct(_start + pos + i, val);
+				}
+			}
 		}
 
 		template <class InputIterator>
 		void insert(iterator position, InputIterator first, InputIterator last,
 			typename ft::enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 		{
-			size_type n = last - first;
+			size_type n = ft::difference(first, last);
 			if (n != 0)
 			{
 				size_type pos = position - begin();
@@ -377,7 +361,7 @@ namespace ft
 				_end += n;
 				for (size_type i = 0; i < n; i++)
 				{
-					_alloc.construct(_start + pos + i, *(first + i));
+					_alloc.construct(_start + pos + i, *first++);
 				}
 			}
 		}
