@@ -9,7 +9,7 @@
 
 namespace ft
 {
-	template <class T, class Allocator = std::allocator<T> >
+	template <typename T, typename Allocator = std::allocator<T> >
 	class vector
 	{
 	public:
