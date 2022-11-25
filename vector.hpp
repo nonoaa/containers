@@ -7,6 +7,8 @@
 #include <memory>
 #include <stdexcept>
 
+#include <iostream>
+
 namespace ft
 {
 	template <typename T, typename Allocator = std::allocator<T> >
@@ -153,10 +155,10 @@ namespace ft
 
 		void resize(size_type n, value_type val = value_type())
 		{
-			// if (n > max_size())
-			// {
-			// 	throw std::out_of_range("ft::vector");
-			// }
+			if (n > max_size())
+			{
+				throw std::out_of_range("ft::vector");
+			}
 			if (n < size())
 			{
 				erase(begin() + n, end());
@@ -179,29 +181,27 @@ namespace ft
 
 		void reserve(size_type n)
 		{
-			if (capacity() >= n)
-			{
-				return ;
-			}
 			if (n > max_size())
 			{
 				throw std::out_of_range("ft::vector");
 			}
-
-			pointer prev_start = _start;
-			pointer prev_end = _end;
-			size_type prev_capacity = capacity();
-
-			_start = _alloc.allocate(n);
-			_end = _start;
-			_end_capacity = _start + n;
-
-			for(pointer it = prev_start; it != prev_end; it++)
+			if (n > capacity())
 			{
-				_alloc.construct(_end++, *it);
-				_alloc.destroy(it);
+				pointer prev_start = _start;
+				pointer prev_end = _end;
+				size_type prev_capacity = capacity();
+
+				_start = _alloc.allocate(n);
+				_end = _start;
+				_end_capacity = _start + n;
+
+				for(pointer it = prev_start; it != prev_end; it++)
+				{
+					_alloc.construct(_end++, *it);
+					_alloc.destroy(it);
+				}
+				_alloc.deallocate(prev_start, prev_capacity);
 			}
-			_alloc.deallocate(prev_start, prev_capacity);
 		}
 
 
@@ -326,19 +326,45 @@ namespace ft
 		
 		void insert(iterator position, size_type n, const value_type& val)
 		{
-			if (n != 0)
+			if (n > 0)
 			{
 				size_type pos = position - begin();
-				reserve(size() + n);
+				vector<T> temp(*this);
+				if (capacity() * 2 < size() + n)
+				{
+					reserve(size() + n);
+				}
+				else if (_end + n > _end_capacity)
+				{
+					empty() ? reserve(1) : reserve(capacity() * 2);
+				}
 				for (size_type i = 1; i <= size() - pos; i++)
 				{
 					_alloc.construct(_end + n - i,  *(_end - i));
 					_alloc.destroy(_end - i);
 				}
-				_end += n;
-				for (size_type i = 0; i < n; i++)
+				try
 				{
-					_alloc.construct(_start + pos + i, val);
+					_end += n;
+					for (size_type i = 0; i < n; i++)
+					{
+						_alloc.construct(_start + pos + i, val);
+					}
+				}
+				catch(...)
+				{
+					clear();
+					_alloc.deallocate(_start, capacity());
+					size_type temp_size = temp.size();
+					_start = _alloc.allocate(temp.capacity());
+					_end = _start;
+					_end_capacity = _start + temp.capacity();
+					pointer temp_start = temp._start;
+					while (temp_size--)
+					{
+						_alloc.construct(_end++, *temp_start++);
+					}
+					throw std::invalid_argument("ft::vector");
 				}
 			}
 		}
@@ -348,20 +374,45 @@ namespace ft
 			typename ft::enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 		{
 			size_type n = ft::difference(first, last);
-			if (n != 0)
+			if (n > 0)
 			{
 				size_type pos = position - begin();
-				reserve(size() + n);
-
+				vector<T> temp(*this);
+				if (capacity() * 2 < size() + n)
+				{
+					reserve(size() + n);
+				}
+				else if (_end + n > _end_capacity)
+				{
+					empty() ? reserve(1) : reserve(capacity() * 2);
+				}
 				for (size_type i = 1; i <= size() - pos; i++)
 				{
 					_alloc.construct(_end + n - i,  *(_end - i));
 					_alloc.destroy(_end - i);
 				}
-				_end += n;
-				for (size_type i = 0; i < n; i++)
+				try
 				{
-					_alloc.construct(_start + pos + i, *first++);
+					_end += n;
+					for (size_type i = 0; i < n; i++)
+					{
+						_alloc.construct(_start + pos + i, *first++);
+					}
+				}
+				catch(...)
+				{
+					clear();
+					_alloc.deallocate(_start, capacity());
+					size_type temp_size = temp.size();
+					_start = _alloc.allocate(temp.capacity());
+					_end = _start;
+					_end_capacity = _start + temp.capacity();
+					pointer temp_start = temp._start;
+					while (temp_size--)
+					{
+						_alloc.construct(_end++, *temp_start++);
+					}
+					throw std::invalid_argument("ft::vector");
 				}
 			}
 		}

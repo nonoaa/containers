@@ -37,7 +37,7 @@
 		+ 포인터가 가리키는 위치(초기화되지 않은 공간)에 객체를 저장하는 함수
 	+ void destory(T*);
 		+ 객체를 소멸시킨다. (객체의 소멸자를 호출시킨다)
-	+	template \<class In, class For\> For uninitialized_copy(In, In, For);
+	+ template \<class In, class For\> For uninitialized_copy(In, In, For);
 		+ std::copy함수와 비슷하다.
 		+ 입력 반복자2개 (first, last)와 순방향 반복자 1개(out)을 인자로 받는다.
 		+ first, last 범위의 요소들을 out이 가리키는 위치에 순서대로 복사한다.

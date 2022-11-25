@@ -35,7 +35,7 @@ namespace ft
 		}
 	};
 
-	template <typename Key, typename Value, typename KeyOfValue, typename Compare, typename Allocator = std::allocator<T> >
+	template <typename Key, typename Value, typename KeyOfValue, typename Compare, typename Allocator = std::allocator<Value> >
 	class Rb_tree
 	{
 	public:
@@ -45,8 +45,6 @@ namespace ft
 		typedef const value_type*				const_pointer;
 		typedef value_type&						reference;
 		typedef const value_type&				const_reference;
-
-
 
 	};
 }
