@@ -45,6 +45,25 @@
 	+ template \<class For, class T\> void uninitialized_fill(For, For, const T&);
 		+ 세번째 인자로 들어온 값으로 주어진 범위의 공간을 채운다.
 
++ rebind
+	```cpp
+	template<typename T>
+	class StlCustomAllocator : public allocator<T>
+	{
+		// ... (상략)
+	
+		template<typename _Other>
+		struct rebind
+		{
+			typedef StlCustomAllocator<_Other> other;
+		};
+	
+		// ... (하략)
+	};
+	```
+	+ 위 예시에서 list의 경우 실제로 사용되는 allocator는 다음과 같이 될 것이다. StlCustomAllocator::rebind<_Node>::other
+	+ rebind 는 어떤 종류의 객체를 얻기 위해 사용된다. std::list와 A라는 타입을 예로들면, std::list<T,A> 할당자는 T를 할당하기 위한 A이지만, 실제로 내부에서 list는 노드 기반으로 가지고 있어야 한다.이렇게 T타입이 아닌, 다른 타입으로도의 할당( node )이 필요해지게 되는데 이와 같은 요구사항을 충족하기 위해 rebind 를 가져야 할 것을 권고 하고 있다. (이는 C++17에서 사용중지 권고가 내려졌고, C++20에서 삭제 예정이다.)
+
 ## Iterator
 ### Iterator 종류별 사용가능한 기능
 + Input Iterator(입력 반복자): 읽기(rvalue, Write 불가능), 비교 (==, !=), 증감연산은 ++만 가능

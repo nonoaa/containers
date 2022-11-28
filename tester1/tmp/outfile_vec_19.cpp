@@ -4,6 +4,7 @@
 #include "algorithm.hpp"
 #include "iterator.hpp"
 #include "map.hpp"
+#include "rb_tree.hpp"
 #include "stack.hpp"
 #include "type_traits.hpp"
 #include "vector.hpp"
@@ -75,5 +76,5 @@ void test_vector_assign_n(long count){
 }
 
 int main(){
-	test_vector_assign_n(20000);
+	test_vector_assign_n(10000);
 }

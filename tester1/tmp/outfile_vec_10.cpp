@@ -4,6 +4,7 @@
 #include "algorithm.hpp"
 #include "iterator.hpp"
 #include "map.hpp"
+#include "rb_tree.hpp"
 #include "stack.hpp"
 #include "type_traits.hpp"
 #include "vector.hpp"
@@ -73,5 +74,5 @@ void test_vector_erase_pos(long count){
 }
 
 int main(){
-	test_vector_erase_pos(20000);
+	test_vector_erase_pos(10000);
 }
