@@ -19,7 +19,7 @@ namespace ft
 
 		pair& operator=(const pair& src)
 		{
-			if (*this != pr)
+			if (*this != src)
 			{
 				first = src.first;
 				second = src.second;

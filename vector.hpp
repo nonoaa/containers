@@ -7,8 +7,6 @@
 #include <memory>
 #include <stdexcept>
 
-#include <iostream>
-
 namespace ft
 {
 	template <typename T, typename Allocator = std::allocator<T> >

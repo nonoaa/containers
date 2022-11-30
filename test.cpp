@@ -5,10 +5,9 @@
 #include <iostream>
 #include "vector.hpp"
 #include <string>
-
+#include "map.hpp"
+#include <map>
 #include <memory>
-
-#include <list>
 // #define TESTED_TYPE foo<int>
 // #define TESTED_NAMESPACE ft
 // #define T_SIZE_TYPE typename TESTED_NAMESPACE::vector<T>::size_type
@@ -195,13 +194,40 @@ class A
 {
     public:
     A() : a() {}
-    int a;
+    int* a;
 };
 
 int main()
 {
-    A a;
-    std::cout << a.a;
+	ft::map<int, int> m;
+	// ft::map<int,int>::iterator it;
+
+	m.insert(ft::make_pair(3, 3));
+	m.insert(ft::make_pair(5, 5));
+	m.insert(ft::make_pair(2, 2));
+	m.insert(ft::make_pair(1, 1));
+	m.insert(ft::make_pair(8, 8));
+
+
+	ft::map<int,int>::iterator it;
+
+	it = m.begin();
+
+	for (; it != m.end(); it++)
+	{
+		cout << it->second;
+	}
+	// ft::pair<int, int> p1(3,2);
+	// ft::pair<int, int> p2(2,5);
+
+	// std::pair<int, int> p3(3,2);
+	// std::pair<int, int> p4(2,5);
+
+	// std::cout << std::less<pair<int, int> >()(p1, p2);
+
+	// m.insert(ft::make_pair(1, 2));
+	// it = m.begin();
+	// std::cout << it->first;
 	// std::vector<int> c = insert_test_1(a);
 	// std::vector<int> d = insert_test_1(b);
 
