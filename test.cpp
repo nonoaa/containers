@@ -202,11 +202,14 @@ int main()
 	ft::map<int, int> m;
 	// ft::map<int,int>::iterator it;
 
-	m.insert(ft::make_pair(3, 3));
 	m.insert(ft::make_pair(5, 5));
 	m.insert(ft::make_pair(2, 2));
 	m.insert(ft::make_pair(1, 1));
 	m.insert(ft::make_pair(8, 8));
+	m.insert(ft::make_pair(3, 3));
+	m.insert(ft::make_pair(10, 10));
+	m.insert(ft::make_pair(12, 12));
+	m.insert(ft::make_pair(11, 11));
 
 
 	ft::map<int,int>::iterator it;

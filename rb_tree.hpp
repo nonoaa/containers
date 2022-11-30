@@ -28,11 +28,15 @@ namespace ft
 		value_type data;
 
 		Rb_tree_node() : data(), color(rb_tree_black), parent(), left(), right() {}
+
+		void flip_color()
+		{
+			color = ((color == rb_tree_red) ? rb_tree_black : rb_tree_red);
+		}
 	};
 
 	template <typename T>
-	bool
-	tree_is_left_child(typename Rb_tree_node<T>::pointer node)
+	bool tree_is_left_child(typename Rb_tree_node<T>::pointer node)
 	{
 		if (node && node->parent && node->parent->left)
 			return node == node->parent->left;
@@ -41,8 +45,7 @@ namespace ft
 	}
 
 	template <typename T>
-	bool
-	tree_is_left_child(typename Rb_tree_node<T>::const_pointer node)
+	bool tree_is_left_child(typename Rb_tree_node<T>::const_pointer node)
 	{
 		if (node && node->parent && node->parent->left)
 			return node == node->parent->left;
@@ -363,7 +366,14 @@ namespace ft
 		Rb_tree(const compare_type& comp, const allocator_type& alloc)
 			: _size(), _header(), _begin(&_header), _compare(comp), _alloc(alloc), _node_alloc(alloc) {}
 		// Rb_tree(): m_root(0), m_nil(0), m_val_alloc(allocator_type()), m_node_alloc(node_allocator()), m_compare(value_compare()), m_size(0) {}
-		// Rb_tree(const Rb_tree& src): m_root(0), m_nil(0), m_compare(src.m_compare) { *this = src; }
+		Rb_tree(const Rb_tree& src): _size(), _header(), _begin(&_header), _compare(src._compare), _alloc(src._alloc), _node_alloc(src._node_alloc)
+		{
+			if (src.root() != NULL)
+			{
+				root() = copy(src.root());
+				root()->parent = &_header;
+			}
+		}
 		// template<class InputIterator>
 		// Rb_tree(typename ft::enable_if< !ft::is_integral<InputIterator>::value, InputIterator >::type first, InputIterator last, const value_compare& comp, const allocator_type& alloc = allocator_type()):
 		// m_val_alloc(alloc), m_node_alloc(node_allocator()), m_compare(comp)
@@ -375,10 +385,22 @@ namespace ft
 		// }
 		Rb_tree& operator=(const Rb_tree & src)
 		{
+			if (*this != src)
+			{
+				clear();
+				_compare = src._compare;
+				if (t.root() != NULL)
+				{
+					root() = copy(root());
+					root()->_parent = &_header;
+				}
+			}
 			return (*this);
 		}
+	
 		~Rb_tree()
 		{
+			// printBinaryTree(root());
 			if (root() != NULL)
 			{
 				clear();
@@ -403,9 +425,24 @@ namespace ft
 		/*                       Capacity                               */
 		/* ============================================================ */
 
-		bool empty() const { return (_size == 0); }
-		size_type size() const { return (_size); }
-		size_type max_size() const { return (size_type(-1)); }
+		bool empty() const
+		{
+			return (_size == 0);
+		}
+
+		size_type size() const
+		{
+			return (_size);
+		}
+
+		size_type max_size() const
+		{
+			return (size_type(-1));
+		}
+
+		/* ============================================================ */
+		/*                       Modifiers                              */
+		/* ============================================================ */
 
 		ft::pair<iterator, bool> insert(const value_type& val)
 		{
@@ -424,8 +461,7 @@ namespace ft
 			}
 			else
 			{
-				// rebalance_after_insertion(new_node);
-				;
+				rebalance_after_insertion(new_node);
 			}
 			root()->color = rb_tree_black;
 			return ft::make_pair(pos, inserted);
@@ -534,6 +570,135 @@ namespace ft
 				inserted = false;
 			}
 			return node;
+		}
+
+		void rebalance_after_insertion(node_pointer node)
+		{
+			while (node != root() && get_node_color(node->parent) == rb_tree_red)	// 4번 규칙을 위반하고 있는 동안
+			{
+				node_pointer uncle = get_sibling(node->parent);
+				if (get_node_color(uncle) == rb_tree_red)	// 1. 삼촌이 빨간색인 경우
+				{
+					uncle->flip_color();
+					node = node->parent;
+					node->flip_color();
+					node = node->parent;
+					node->flip_color();
+				}
+				else if (tree_is_left_child<value_type>(node->parent)) // 부모 노드가 할아버지 노드의 왼쪽 자식인 경우
+				{
+					if (!tree_is_left_child<value_type>(node))		// 2. 삼촌이 검은색이고 node가 오른쪽 자식일 때
+					{
+						node = node->parent;
+						rotate_left(node);
+					}
+					node = node->parent; // 3. 삼촌이 검은색이고 node가 왼쪽 자식일 때
+					node->flip_color();
+					node = node->parent;
+					node->flip_color();
+					rotate_right(node);
+					break ;
+				}
+				else	// 부모가 할아버지 오른쪽 자식인 경우
+				{
+					if (tree_is_left_child<value_type>(node))
+					{
+						node = node->parent;
+						rotate_right(node);
+					}
+					node = node->parent;
+					node->flip_color();
+					node = node->parent;
+					node->flip_color();
+					rotate_left(node);
+					break ;
+				}
+			}
+		}
+
+		void rotate_left(node_pointer node)
+		{
+			node_pointer right_node = node->right;
+			node->right = right_node->left;
+			if (node->right != NULL)
+				node->right->parent = node;
+			right_node->parent = node->parent;
+			if (tree_is_left_child<value_type>(node))
+				node->parent->left = right_node;
+			else
+				node->parent->right = right_node;
+			right_node->left = node;
+			node->parent = right_node;
+		}
+
+		void rotate_right(node_pointer node)
+		{
+			node_pointer left_node = node->left;
+			node->left = left_node->right;
+			if (node->left != NULL)
+				node->left->parent = node;
+			left_node->parent = node->parent;
+			if (tree_is_left_child<value_type>(node))
+				node->parent->left = left_node;
+			else
+				node->parent->right = left_node;
+			left_node->right = node;
+			node->parent = left_node;
+		}
+
+		node_pointer get_sibling(node_pointer node) const
+		{
+			if (tree_is_left_child<value_type>(node))
+				return node->parent->right;
+			else
+				return node->parent->left;
+		}
+
+		Rb_tree_Color_type get_node_color(node_pointer node)
+		{
+			if (node == NULL)
+				return rb_tree_black;
+			else
+				return node->color;
+		}
+
+		node_pointer copy(const node_pointer node)
+		{
+			if (node == NULL)
+				return NULL;
+			node_pointer new_node = construct_node(node->data);
+			new_node->left = copy(node->left);
+			if (new_node->left != NULL)
+				new_node->left->parent = new_node;
+			new_node->right = copy(node->right);
+			if (new_node->right != NULL)
+				new_node->right->parent = new_node;
+			return new_node;
+		}
+
+		void printBinaryTree(node_pointer root, int space = 0, int height = 10)
+		{
+			// 기본 케이스
+			if (root == NULL) {
+				return;
+			}
+		
+			// 레벨 사이의 거리 증가
+			space += height;
+		
+			// 오른쪽 자식을 먼저 출력
+			printBinaryTree(root->right, space);
+			std::cout << std::endl;
+		
+			// 공백으로 채운 후 현재 노드를 인쇄합니다.
+			for (int i = height; i < space; i++) {
+				std::cout << ' ';
+			}
+			std::cout << root->data.first<< "," << root->data.second;
+		
+			// 왼쪽 자식 출력
+			std::cout << std::endl;
+			printBinaryTree(root->left, space);
 		}
 	};
 }
