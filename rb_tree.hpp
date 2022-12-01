@@ -27,7 +27,7 @@ namespace ft
 		pointer right;
 		value_type data;
 
-		Rb_tree_node() : data(), color(rb_tree_black), parent(), left(), right() {}
+		Rb_tree_node() : color(rb_tree_black), parent(), left(), right(), data() {}
 
 		void flip_color()
 		{
@@ -365,7 +365,6 @@ namespace ft
 	public:
 		Rb_tree(const compare_type& comp, const allocator_type& alloc)
 			: _size(), _header(), _begin(&_header), _compare(comp), _alloc(alloc), _node_alloc(alloc) {}
-		// Rb_tree(): m_root(0), m_nil(0), m_val_alloc(allocator_type()), m_node_alloc(node_allocator()), m_compare(value_compare()), m_size(0) {}
 		Rb_tree(const Rb_tree& src): _size(), _header(), _begin(&_header), _compare(src._compare), _alloc(src._alloc), _node_alloc(src._node_alloc)
 		{
 			if (src.root() != NULL)
@@ -389,10 +388,10 @@ namespace ft
 			{
 				clear();
 				_compare = src._compare;
-				if (t.root() != NULL)
+				if (src.root() != NULL)
 				{
 					root() = copy(root());
-					root()->_parent = &_header;
+					root()->parent = &_header;
 				}
 			}
 			return (*this);
@@ -467,20 +466,72 @@ namespace ft
 			return ft::make_pair(pos, inserted);
 		}
 
-		// iterator insert(iterator position, const value_type& value) {}
-		// template<class InputIt>
-		// void insert(typename ft::enable_if< !ft::is_integral<InputIt>::value, InputIt >::type first, InputIt last) {}
-		// void erase(iterator pos) {}
-		// size_type erase(const value_type& value) {}
-		// void erase(iterator first, iterator last) {}
-		// void swap(Rb_tree &other) {}
+		iterator insert(iterator position, const value_type& val)
+		{
+			(void)position;
+			return insert(val).first;
+		}
+
+		template<typename InputIterator>
+		void insert(InputIterator first, InputIterator last)
+		{
+			for (; first != last; first++)
+				insert(*first);
+		}
+
+		void erase(iterator position)
+		{
+			node_pointer pos = position.base();
+			if (pos == _begin)
+			{
+				position++;
+				_begin = position.base();
+			}
+			erase(root(), pos);
+			if (root() != NULL)
+			{
+				root()->parent = &_header;
+				root()->color = rb_tree_black;
+			}
+			destroy_node(pos);
+		}
+
+		size_type erase(const value_type& val)
+		{
+			iterator pos = find(val);
+			if (pos == end())
+				return 0;
+			erase(pos);
+			return 1;
+		}
+
+		void erase(iterator first, iterator last)
+		{
+			for (; first != last; first++)
+				erase(first);
+		}
+
+		void swap(Rb_tree& x)
+		{
+			ft::swap(_begin, x._begin);
+			ft::swap(_header.left, x._header.left);
+			ft::swap(_size, x._size);
+			if (_size != 0 && x._size != 0)
+				ft::swap(root()->parent, x.root()->parent);
+			else if (_size != 0)
+				root()->parent = &_header;
+			else if (x._size != 0)
+				x.root()->parent = &(x._header);
+			ft::swap(_compare, x._compare);
+		}
+
 		void clear()
 		{
 			if (root() != NULL)
 			{
 				destroy_all(root());
 				root() = NULL;
-				// _begin = end_node();
+				// _begin = &_header;
 			}
 		}
 
