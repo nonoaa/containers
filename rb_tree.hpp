@@ -4,7 +4,7 @@
 #include <memory>
 #include "iterator.hpp"
 #include "pair.hpp"
-
+#include "algorithm.hpp"
 #include <iostream>
 
 namespace ft
@@ -384,13 +384,13 @@ namespace ft
 		// }
 		Rb_tree& operator=(const Rb_tree & src)
 		{
-			if (*this != src)
+			if (this != &src)
 			{
 				clear();
 				_compare = src._compare;
 				if (src.root() != NULL)
 				{
-					root() = copy(root());
+					root() = copy(src.root());
 					root()->parent = &_header;
 				}
 			}
@@ -402,7 +402,9 @@ namespace ft
 			// printBinaryTree(root());
 			if (root() != NULL)
 			{
-				clear();
+				destroy(root());
+				root() = NULL;
+				_begin = &_header;
 			}
 		}
 
@@ -529,9 +531,9 @@ namespace ft
 		{
 			if (root() != NULL)
 			{
-				destroy_all(root());
+				destroy(root());
 				root() = NULL;
-				// _begin = &_header;
+				_begin = &_header;
 			}
 		}
 
@@ -550,14 +552,138 @@ namespace ft
 			}
 			return end();
 		}
-		// const_iterator find(const value_type& value) const {}
-		// size_type count(const value_type& value) const {}
-		// iterator lower_bound(const value_type& value) {}
-		// const_iterator lower_bound(const value_type& value) const {}
-		// iterator upper_bound(const value_type& value) {}
-		// ft::pair<iterator, iterator> equal_range(const value_type &value) {}
-		// ft::pair<const iterator, iterator> equal_range(const value_type &value) {}
 
+		const_iterator find(const value_type& val) const
+		{
+			node_pointer node = root();
+
+			while (node != NULL)
+			{
+				if (_compare(node->data, val))
+					node = node->right;
+				else if (_compare(val, node->data))
+					node = node->left;
+				else
+					return const_iterator(node);
+			}
+			return end();
+		}
+		size_type count(const value_type& val) const
+		{
+			return find(val) == end() ? 0 : 1;
+		}
+
+		iterator lower_bound(const value_type& val)
+		{
+			node_pointer node = root();
+			node_pointer pos = &_header;
+
+			while (node != NULL)
+			{
+				if (!_compare(node->data, val))
+				{
+					pos = node;
+					node = node->left;
+				}
+				else
+					node = node->right;
+			}
+			return iterator(pos);
+		}
+
+		const_iterator lower_bound(const value_type& val) const
+		{
+			const_node_pointer node = root();
+			const_node_pointer pos = &_header;
+
+			while (node != NULL)
+			{
+				if (!_compare(node->data, val))
+				{
+					pos = node;
+					node = node->left;
+				}
+				else
+					node = node->right;
+			}
+			return const_iterator(pos);
+		}
+		
+		iterator upper_bound(const value_type& val)
+		{
+			node_pointer node = root();
+			node_pointer pos = &_header;
+
+			while (node != NULL)
+			{
+				if (_compare(val, node->data))
+				{
+					pos = node;
+					node = node->left;
+				}
+				else
+					node = node->right;
+			}
+			return iterator(pos);
+		}
+
+		const_iterator upper_bound(const value_type& val) const
+		{
+			const_node_pointer node = root();
+			const_node_pointer pos = &_header;
+
+			while (node != NULL)
+			{
+				if (_compare(val, node->data))
+				{
+					pos = node;
+					node = node->left;
+				}
+				else
+					node = node->right;
+			}
+			return const_iterator(pos);
+		}
+
+		ft::pair<iterator, iterator> equal_range(const value_type& val)
+		{
+			node_pointer node = root();
+			node_pointer pos = &_header;
+
+			while (node != NULL)
+			{
+				if (_compare(val, node->data))
+				{
+					pos = node;
+					node = node->left;
+				}
+				else if (_compare(node->data, val))
+					node = node->right;
+				else
+					return ft::make_pair(iterator(node), iterator(node->right == NULL ? pos : tree_min<value_type>(node->right)));
+			}
+			return ft::make_pair(iterator(pos), iterator(pos));
+		}
+
+		ft::pair<const_iterator, const_iterator> equal_range(const value_type& val) const
+		{
+			const_node_pointer node = root();
+			const_node_pointer pos = &_header;
+
+			while (node != NULL)
+			{
+				if (_compare(val, node->data))
+				{
+					pos = node;
+					node = node->left;
+				}
+				else if (_compare(node->data, val))
+					node = node->right;
+				else
+					return ft::make_pair(const_iterator(node), const_iterator(node->right == NULL ? pos : tree_min<value_type>(node->right)));
+			}
+			return ft::make_pair(const_iterator(pos), const_iterator(pos));
+		}
 
 	private:
 		node_pointer& root() { return _header.left; }
@@ -583,12 +709,12 @@ namespace ft
 			--_size;
 		}
 
-		void destroy_all(node_pointer node)
+		void destroy(node_pointer node)
 		{
 			if (node == NULL)
 				return ;
-			destroy_all(node->left);
-			destroy_all(node->right);
+			destroy(node->left);
+			destroy(node->right);
 			destroy_node(node);
 		}
 
@@ -713,7 +839,7 @@ namespace ft
 				return node->color;
 		}
 
-		node_pointer copy(const node_pointer node)
+		node_pointer copy(const_node_pointer node)
 		{
 			if (node == NULL)
 				return NULL;
@@ -746,12 +872,18 @@ namespace ft
 				std::cout << ' ';
 			}
 			std::cout << root->data.first<< "," << root->data.second;
-		
+
 			// 왼쪽 자식 출력
 			std::cout << std::endl;
 			printBinaryTree(root->left, space);
 		}
 	};
+
+	template<typename T, typename Compare, typename Alloc>
+	void swap(Rb_tree<T, Compare, Alloc>& lhs, Rb_tree<T, Compare, Alloc>& rhs)
+	{
+		lhs.swap(rhs);
+	}
 }
 
 #endif
