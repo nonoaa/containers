@@ -1,0 +1,39 @@
+In file included from ../map_tests/equal_range().cpp:2:
+In file included from ../map_tests/__service.ipp:3:
+In file included from ../map_tests/../../../map.hpp:5:
+In file included from ../map_tests/../../../rb_tree.hpp:6:
+../map_tests/../../../pair.hpp:17:33: error: no matching constructor for initialization of 'ft::pair<ft::Rb_tree_const_iterator<ft::pair<const int, int> >, ft::Rb_tree_const_iterator<ft::pair<const int, int> > >::first_type' (aka 'ft::Rb_tree_const_iterator<ft::pair<const int, int> >')
+                pair(const pair<U, V>& src) : first(src.first), second(src.second) {};
+                                              ^     ~~~~~~~~~
+../map_tests/equal_range().cpp:43:90: note: in instantiation of function template specialization 'ft::pair<ft::Rb_tree_const_iterator<ft::pair<const int, int> >, ft::Rb_tree_const_iterator<ft::pair<const int, int> > >::pair<ft::Rb_tree_iterator<ft::pair<const int, int> >, ft::Rb_tree_iterator<ft::pair<const int, int> > >' requested here
+    const _pair<_map<int, int>::const_iterator , _map<int, int>::const_iterator>& pair = mp.equal_range(10);
+                                                                                         ^
+../map_tests/equal_range().cpp:64:73: note: in instantiation of function template specialization 'equal_range_test<int, int>' requested here
+    exit(run_map_unit_test<int, int>("equal_range()", equal_range_test, equal_range_test));
+                                                                        ^
+../map_tests/../../../rb_tree.hpp:214:3: note: candidate constructor not viable: no known conversion from 'const ft::pair<ft::Rb_tree_iterator<ft::pair<const int, int> >, ft::Rb_tree_iterator<ft::pair<const int, int> > >::first_type' (aka 'const ft::Rb_tree_iterator<ft::pair<const int, int> >') to 'const ft::Rb_tree_const_iterator<ft::pair<const int, int> >' for 1st argument
+                Rb_tree_const_iterator(const Rb_tree_const_iterator& src) : _node(src._node) {}
+                ^
+../map_tests/../../../rb_tree.hpp:216:3: note: candidate constructor not viable: no known conversion from 'const ft::pair<ft::Rb_tree_iterator<ft::pair<const int, int> >, ft::Rb_tree_iterator<ft::pair<const int, int> > >::first_type' (aka 'const ft::Rb_tree_iterator<ft::pair<const int, int> >') to 'const ft::Rb_tree_const_iterator<ft::pair<const int, int> >::const_node_pointer' (aka 'const Rb_tree_node<ft::pair<const int, int> > *const') for 1st argument
+                Rb_tree_const_iterator(const const_node_pointer& val) : _node(val) {}
+                ^
+../map_tests/../../../rb_tree.hpp:213:3: note: candidate constructor not viable: requires 0 arguments, but 1 was provided
+                Rb_tree_const_iterator() : _node() {}
+                ^
+In file included from ../map_tests/equal_range().cpp:2:
+In file included from ../map_tests/__service.ipp:3:
+In file included from ../map_tests/../../../map.hpp:5:
+In file included from ../map_tests/../../../rb_tree.hpp:6:
+../map_tests/../../../pair.hpp:17:51: error: no matching constructor for initialization of 'ft::pair<ft::Rb_tree_const_iterator<ft::pair<const int, int> >, ft::Rb_tree_const_iterator<ft::pair<const int, int> > >::second_type' (aka 'ft::Rb_tree_const_iterator<ft::pair<const int, int> >')
+                pair(const pair<U, V>& src) : first(src.first), second(src.second) {};
+                                                                ^      ~~~~~~~~~~
+../map_tests/../../../rb_tree.hpp:214:3: note: candidate constructor not viable: no known conversion from 'const ft::pair<ft::Rb_tree_iterator<ft::pair<const int, int> >, ft::Rb_tree_iterator<ft::pair<const int, int> > >::second_type' (aka 'const ft::Rb_tree_iterator<ft::pair<const int, int> >') to 'const ft::Rb_tree_const_iterator<ft::pair<const int, int> >' for 1st argument
+                Rb_tree_const_iterator(const Rb_tree_const_iterator& src) : _node(src._node) {}
+                ^
+../map_tests/../../../rb_tree.hpp:216:3: note: candidate constructor not viable: no known conversion from 'const ft::pair<ft::Rb_tree_iterator<ft::pair<const int, int> >, ft::Rb_tree_iterator<ft::pair<const int, int> > >::second_type' (aka 'const ft::Rb_tree_iterator<ft::pair<const int, int> >') to 'const ft::Rb_tree_const_iterator<ft::pair<const int, int> >::const_node_pointer' (aka 'const Rb_tree_node<ft::pair<const int, int> > *const') for 1st argument
+                Rb_tree_const_iterator(const const_node_pointer& val) : _node(val) {}
+                ^
+../map_tests/../../../rb_tree.hpp:213:3: note: candidate constructor not viable: requires 0 arguments, but 1 was provided
+                Rb_tree_const_iterator() : _node() {}
+                ^
+2 errors generated.
