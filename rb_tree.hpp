@@ -6,6 +6,8 @@
 #include "pair.hpp"
 #include "algorithm.hpp"
 
+#include <iostream>
+
 namespace ft
 {
 	typedef bool Rb_tree_Color_type;
@@ -27,19 +29,6 @@ namespace ft
 		value_type data;
 
 		Rb_tree_node() : color(rb_tree_black), parent(), left(), right(), data() {}
-
-		// Rb_tree_node& operator=(const Rb_tree_node& n)
-		// {
-		// 	if (this != &n)
-		// 	{
-		// 		color = n.color;
-		// 		parent = n.parent;
-		// 		left = n.left;
-		// 		right = n.right;
-		// 		data = n.data;
-		// 	}
-		// 	return *this;
-		// }
 
 		void flip_color()
 		{
@@ -711,7 +700,7 @@ namespace ft
 
 		const_node_pointer& root() const
 		{
-			return const_cast<const_node_pointer&>(this->_header.left);
+			return const_cast<const_node_pointer&>(_header.left);
 		}
 
 		node_pointer construct_node(const value_type& data)
@@ -757,15 +746,15 @@ namespace ft
 				node->left = insert(node->left, new_node, inserted, pos);
 				node->left->parent = node;
 			}
-			else if (_compare(node->data, new_node->data))	// greater than
-			{
-				node->right = insert(node->right, new_node, inserted, pos);
-				node->right->parent = node;
-			}
 			else if (_compare(new_node->data, node->data))	// less than
 			{
 				node->left = insert(node->left, new_node, inserted, pos);
 				node->left->parent = node;
+			}
+			else if (_compare(node->data, new_node->data))	// greater than
+			{
+				node->right = insert(node->right, new_node, inserted, pos);
+				node->right->parent = node;
 			}
 			else	// equal
 			{
@@ -905,7 +894,7 @@ namespace ft
 			}
 			else
 			{
-				// root can't be this->_parent's right child
+				// root can't be _parent's right child
 				replmt->parent->right = replmt_child;
 				sibling = replmt->parent->left;
 			}
@@ -938,117 +927,117 @@ namespace ft
 				if (replmt_child != NULL)		// Case 2
 					replmt_child->color = rb_tree_black;
 				else
-					this->rebalance_before_erasion(root, replmt_child, sibling);	// replmt_child is always NULL at the start
+					rebalance_before_erasion(root, replmt_child, sibling);	// replmt_child is always NULL at the start
 			}
 		}
 		
 		void rebalance_before_erasion(node_pointer root, node_pointer node, node_pointer sibling)
 		{
-			while (true)	// (node != root && this->get_node_color(node) == BLACK)
+			while (true)	// (node != root && get_node_color(node) == BLACK)
 			{
 				if (!tree_is_left_child<value_type>(sibling))	// tree_is_left_child(node)
 				{
-					if (this->get_node_color(sibling) == rb_tree_red)	// Case 3
+					if (get_node_color(sibling) == rb_tree_red)	// Case 3
 					{
 						sibling->flip_color();
 						sibling->parent->flip_color();
-						this->rotate_left(sibling->parent);
+						rotate_left(sibling->parent);
 						if (root == sibling->left)
 							root = sibling;
 						sibling = sibling->left->right;
 					}
-					if (this->get_node_color(sibling->left) == rb_tree_black && this->get_node_color(sibling->right) == rb_tree_black)	// Case 4
+					if (get_node_color(sibling->left) == rb_tree_black && get_node_color(sibling->right) == rb_tree_black)	// Case 4
 					{
 						sibling->flip_color();
 						node = sibling->parent;
-						if (node == root || this->get_node_color(node) == rb_tree_red)
+						if (node == root || get_node_color(node) == rb_tree_red)
 						{
 							node->color = rb_tree_black;
 							break ;
 						}
-						sibling = this->get_sibling(node);
+						sibling = get_sibling(node);
 					}
 					else	// sibling has one red child
 					{
-						if (this->get_node_color(sibling->right) == rb_tree_black)		// Case 5
+						if (get_node_color(sibling->right) == rb_tree_black)		// Case 5
 						{
 							sibling->left->flip_color();	// the left child is red
 							sibling->flip_color();
-							this->rotate_right(sibling);
+							rotate_right(sibling);
 							sibling = sibling->parent;
 						}
 						sibling->color = sibling->parent->color;		// Case 6
 						sibling->parent->color = rb_tree_black;
 						sibling->right->color = rb_tree_black;
-						this->rotate_left(sibling->parent);
+						rotate_left(sibling->parent);
 						break ;
 					}
 				}
 				else	// the same as before, but in reverse color
 				{
-					if (this->get_node_color(sibling) == rb_tree_red)		// Case 3
+					if (get_node_color(sibling) == rb_tree_red)		// Case 3
 					{
 						sibling->flip_color();
 						sibling->parent->flip_color();
-						this->rotate_right(sibling->parent);
+						rotate_right(sibling->parent);
 						if (root == sibling->right)
 							root = sibling;
 						sibling = sibling->right->left;
 					}
-					if (this->get_node_color(sibling->left) == rb_tree_black && this->get_node_color(sibling->right) == rb_tree_black)	// Case 4
+					if (get_node_color(sibling->left) == rb_tree_black && get_node_color(sibling->right) == rb_tree_black)	// Case 4
 					{
 						sibling->flip_color();
 						node = sibling->parent;
-						if (node == root || this->get_node_color(node) == rb_tree_red)
+						if (node == root || get_node_color(node) == rb_tree_red)
 						{
 							node->color = rb_tree_black;
 							break ;
 						}
-						sibling = this->get_sibling(node);
+						sibling = get_sibling(node);
 					}
 					else	// sibling has one red child
 					{
-						if (this->get_node_color(sibling->left) == rb_tree_black)		// Case 5
+						if (get_node_color(sibling->left) == rb_tree_black)		// Case 5
 						{
 							sibling->right->flip_color();	// the right child is red
 							sibling->flip_color();
-							this->rotate_left(sibling);
+							rotate_left(sibling);
 							sibling = sibling->parent;
 						}
 						sibling->color = sibling->parent->color;		// Case 6
 						sibling->parent->color = rb_tree_black;
 						sibling->left->color = rb_tree_black;
-						this->rotate_right(sibling->parent);
+						rotate_right(sibling->parent);
 						break ;
 					}
 				}
 			}
 		}
 
-		void printBinaryTree(node_pointer root, int space = 0, int height = 10)
-		{
-			// 기본 케이스
-			if (root == NULL) {
-				return;
-			}
+		// void printBinaryTree(node_pointer root, int space = 0, int height = 10)
+		// {
+		// 	// 기본 케이스
+		// 	if (root == NULL) {
+		// 		return;
+		// 	}
 		
-			// 레벨 사이의 거리 증가
-			space += height;
+		// 	// 레벨 사이의 거리 증가
+		// 	space += height;
 		
-			// 오른쪽 자식을 먼저 출력
-			printBinaryTree(root->right, space);
-			std::cout << std::endl;
+		// 	// 오른쪽 자식을 먼저 출력
+		// 	printBinaryTree(root->right, space);
+		// 	std::cout << std::endl;
 		
-			// 공백으로 채운 후 현재 노드를 인쇄합니다.
-			for (int i = height; i < space; i++) {
-				std::cout << ' ';
-			}
-			std::cout << root->data.first<< "," << root->data.second;
+		// 	// 공백으로 채운 후 현재 노드를 인쇄합니다.
+		// 	for (int i = height; i < space; i++) {
+		// 		std::cout << ' ';
+		// 	}
+		// 	std::cout << root->data.first<< "," << root->data.second;
 
-			// 왼쪽 자식 출력
-			std::cout << std::endl;
-			printBinaryTree(root->left, space);
-		}
+		// 	// 왼쪽 자식 출력
+		// 	std::cout << std::endl;
+		// 	printBinaryTree(root->left, space);
+		// }
 	};
 
 	template<typename T, typename Compare, typename Alloc>

@@ -1,10 +1,8 @@
 #ifndef MAP_HPP
 #define MAP_HPP
 
-#include <functional>
 #include "rb_tree.hpp"
-#include "pair.hpp"
-
+#include <functional>
 
 namespace ft
 {

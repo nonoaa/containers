@@ -111,7 +111,7 @@
 		};
 		```
 
-### vector
+## vector
 + 멤버함수
 	+ iterator 반환 함수
 		+ begin() : 시작 이터레이터 반환
@@ -137,10 +137,6 @@
 		+ iterator erase(iterator position) : position위치의 원소를 삭제한다.
 		+ iterator erase(iterator first, iterator last) : first부터 last 직전까지의 원소를 삭제한다.
 
-### map
-+ 
-
-
 ## algorithm
 + equal
 	+ 두 범위의 요소가 같은지 검사하는 함수
@@ -149,7 +145,42 @@
 	+ 사전식 순서로 비교해주는 함수
 	+ first1, last1이 first2, last2보다 사전순으로 작을 경우 true를 반환한다.
 
-## Red-Black Tree
+## map
++ Red-Black Tree를 사용하여 내부에 Key와 Value형태로 이루어진 데이터를 저장한다.
++ 기능
+	+ empty
+		+ 컨테이너가 비어있는지 확인하여 비어있으면 1, 아니면 0 반환
+	+ size
+		+ 컨테이너에 들어있는 원소의 개수 반환
+	+ max_size
+		+ 최대 size를 반환
+	+ insert
+		+ 원소를 삽입
+	+ erase
+		+ 해당 원소를 제거
+	+ swap
+		+ map과 map각각의 내부의 데이터를 서로 바꾼다.
+	+ clear
+		+ 모든 데이터를 지운다.
+	+ key_comp
+		+ 키를 비교하는 비교 함수를 반환한다.
+	+ value_comp
+		+ value_type의 key를 비교하는 비교함수를 반환한다.
+	+ find
+		+ 입력받은 원소를 찾아 이터레이터를 반환한다.
+	+ count
+		+ 키를 입력받아 해당 키를 가진 원소의 개수를 반환한다. (같은 키로 여러개의 값을 가질 수 없으므로 1 또는 0이 반환된다.)
+	+ lower_bound
+		+ 입력받은 키보다 작지 않은 첫 원소의 이터레이터를 반환한다. (같은 값 포함)
+	+ upper_bound
+		+ 입력받은 키보다 큰 첫 원소의 이터레이터를 반환한다.
+	+ equal_range
+		+ 키를 입력받아 first로 lower_bound, second로 upper_bound를 가진 pair를 반환한다.
+	+ get_allocator
+		+ allocator를 반환한다.
+
+
+### Red-Black Tree
 + 일반적인 이진트리의 경우, 한쪽에만 자식이 많이 생겨 균형 있지 못하게 자라날 수 있다.
 + Red-Black Tree의 경우 균형을 잡아줌으로써 일정한 실행 시간을 보장해줄 수 있다. 
 + 5가지 조건을 만족하는 이진 트리를 Red-Black트리라고 부른다.
@@ -244,3 +275,5 @@
 		}
 	```
 	+ 위와 같이 비멤버함수로 오버로딩하면 교환법칙이 성립할 수 있다.
+
+### std::
