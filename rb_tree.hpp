@@ -334,7 +334,6 @@ namespace ft
 	class Rb_tree
 	{
 	public:
-		// typedef Key										key_type;
 		typedef Value														value_type;
 		typedef Compare														compare_type;
 
@@ -392,7 +391,6 @@ namespace ft
 	
 		~Rb_tree()
 		{
-			// printBinaryTree(root());
 			if (root() != NULL)
 			{
 				destroy(root());
@@ -741,12 +739,7 @@ namespace ft
 				inserted = true;
 				return new_node;
 			}
-			if (_compare(node->data, new_node->data) == _compare(new_node->data, node->data))
-			{
-				node->left = insert(node->left, new_node, inserted, pos);
-				node->left->parent = node;
-			}
-			else if (_compare(new_node->data, node->data))	// less than
+			if (_compare(new_node->data, node->data))	// less than
 			{
 				node->left = insert(node->left, new_node, inserted, pos);
 				node->left->parent = node;
@@ -888,20 +881,19 @@ namespace ft
 			{
 				replmt->parent->left = replmt_child;
 				if (replmt == root)
-					root = replmt_child;	// sibling will be null in this case
+					root = replmt_child;
 				else
 					sibling = replmt->parent->right;
 			}
 			else
 			{
-				// root can't be _parent's right child
 				replmt->parent->right = replmt_child;
 				sibling = replmt->parent->left;
 			}
 
 			Rb_tree_Color_type replmt_color = replmt->color;
 			
-			if (replmt != node) // copy the content of node into replmt
+			if (replmt != node)
 			{
 				replmt->parent = node->parent;
 				if (tree_is_left_child<value_type>(node))
@@ -918,26 +910,22 @@ namespace ft
 					root = replmt;
 			}
 
-			// we don't need to rebalance if we removed a red node or if there are no more nodes in the tree
-			if (replmt_color == rb_tree_black && root != NULL)		// Case 1
+			if (replmt_color == rb_tree_black && root != NULL)
 			{
-				// replmt had either no children or one red child (replmt_child).
-				// so, if replmt_child != NULL it is either red or root.
-				// root can't be double black and a red node will be flipped to black.
-				if (replmt_child != NULL)		// Case 2
+				if (replmt_child != NULL)
 					replmt_child->color = rb_tree_black;
 				else
-					rebalance_before_erasion(root, replmt_child, sibling);	// replmt_child is always NULL at the start
+					rebalance_after_erasion(root, replmt_child, sibling);
 			}
 		}
 		
-		void rebalance_before_erasion(node_pointer root, node_pointer node, node_pointer sibling)
+		void rebalance_after_erasion(node_pointer root, node_pointer node, node_pointer sibling)
 		{
-			while (true)	// (node != root && get_node_color(node) == BLACK)
+			while (true)
 			{
-				if (!tree_is_left_child<value_type>(sibling))	// tree_is_left_child(node)
+				if (!tree_is_left_child<value_type>(sibling))
 				{
-					if (get_node_color(sibling) == rb_tree_red)	// Case 3
+					if (get_node_color(sibling) == rb_tree_red)
 					{
 						sibling->flip_color();
 						sibling->parent->flip_color();
@@ -946,7 +934,7 @@ namespace ft
 							root = sibling;
 						sibling = sibling->left->right;
 					}
-					if (get_node_color(sibling->left) == rb_tree_black && get_node_color(sibling->right) == rb_tree_black)	// Case 4
+					if (get_node_color(sibling->left) == rb_tree_black && get_node_color(sibling->right) == rb_tree_black)
 					{
 						sibling->flip_color();
 						node = sibling->parent;
@@ -957,25 +945,25 @@ namespace ft
 						}
 						sibling = get_sibling(node);
 					}
-					else	// sibling has one red child
+					else
 					{
-						if (get_node_color(sibling->right) == rb_tree_black)		// Case 5
+						if (get_node_color(sibling->right) == rb_tree_black)
 						{
-							sibling->left->flip_color();	// the left child is red
+							sibling->left->flip_color();
 							sibling->flip_color();
 							rotate_right(sibling);
 							sibling = sibling->parent;
 						}
-						sibling->color = sibling->parent->color;		// Case 6
+						sibling->color = sibling->parent->color;
 						sibling->parent->color = rb_tree_black;
 						sibling->right->color = rb_tree_black;
 						rotate_left(sibling->parent);
 						break ;
 					}
 				}
-				else	// the same as before, but in reverse color
+				else
 				{
-					if (get_node_color(sibling) == rb_tree_red)		// Case 3
+					if (get_node_color(sibling) == rb_tree_red)
 					{
 						sibling->flip_color();
 						sibling->parent->flip_color();
@@ -984,7 +972,7 @@ namespace ft
 							root = sibling;
 						sibling = sibling->right->left;
 					}
-					if (get_node_color(sibling->left) == rb_tree_black && get_node_color(sibling->right) == rb_tree_black)	// Case 4
+					if (get_node_color(sibling->left) == rb_tree_black && get_node_color(sibling->right) == rb_tree_black)
 					{
 						sibling->flip_color();
 						node = sibling->parent;
@@ -995,16 +983,16 @@ namespace ft
 						}
 						sibling = get_sibling(node);
 					}
-					else	// sibling has one red child
+					else
 					{
-						if (get_node_color(sibling->left) == rb_tree_black)		// Case 5
+						if (get_node_color(sibling->left) == rb_tree_black)
 						{
-							sibling->right->flip_color();	// the right child is red
+							sibling->right->flip_color();
 							sibling->flip_color();
 							rotate_left(sibling);
 							sibling = sibling->parent;
 						}
-						sibling->color = sibling->parent->color;		// Case 6
+						sibling->color = sibling->parent->color;
 						sibling->parent->color = rb_tree_black;
 						sibling->left->color = rb_tree_black;
 						rotate_right(sibling->parent);
@@ -1020,7 +1008,6 @@ namespace ft
 		// 	if (root == NULL) {
 		// 		return;
 		// 	}
-		
 		// 	// 레벨 사이의 거리 증가
 		// 	space += height;
 		

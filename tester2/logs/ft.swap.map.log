@@ -1,7 +1,7 @@
 BEFORE SWAP
 foo contains:
 size: 7
-max_size: 18446744073709551615
+max_size: 2305843009213693951
 
 Content is:
 - key: a | value: 7
@@ -14,7 +14,7 @@ Content is:
 ###############################################
 bar contains:
 size: 4
-max_size: 18446744073709551615
+max_size: 2305843009213693951
 
 Content is:
 - key: w | value: 15
@@ -25,7 +25,7 @@ Content is:
 AFTER SWAP
 foo contains:
 size: 4
-max_size: 18446744073709551615
+max_size: 2305843009213693951
 
 Content is:
 - key: w | value: 15
@@ -35,7 +35,7 @@ Content is:
 ###############################################
 bar contains:
 size: 7
-max_size: 18446744073709551615
+max_size: 2305843009213693951
 
 Content is:
 - key: a | value: 7
