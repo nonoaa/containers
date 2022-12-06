@@ -21,7 +21,10 @@ namespace ft
 		// typedef typename container_type::reference			reference;
 		// // const T&
 		// typedef typename container_type::const_reference	const_reference;
+	protected:
+		Container c;
 
+	public:
 		explicit stack(const container_type& cont = container_type()) : c(cont) {}
 		stack &operator=(const stack& src) { c = src.c; return *this; }
 		~stack() {}
@@ -56,39 +59,47 @@ namespace ft
 			c.pop_back();
 		}
 
-		bool operator==(const stack& s)
-		{
-			return c == s.c;
-		}
-
-		bool operator!=(const stack& s)
-		{
-			return c != s.c;
-		}
-
-		bool operator<(const stack& s)
-		{
-			return c < s.c;
-		}
-
-		bool operator>(const stack& s)
-		{
-			return c > s.c;
-		}
-
-		bool operator<=(const stack& s)
-		{
-			return c <= s.c;
-		}
-
-		bool operator>=(const stack& s)
-		{
-			return c >= s.c;
-		}
-
-	protected:
-		Container c;
+		template <typename Tp, typename C>
+		friend bool operator==(const stack<Tp, C>& lhs, const stack<Tp, C>& rhs);
+		template <typename Tp, typename C>
+		friend bool operator<(const stack<Tp, C>& lhs, const stack<Tp, C>& rhs);
 	};
+
+	template <typename T, typename Container>
+	bool operator==(const stack<T, Container>& lhs, const stack<T,Container>& rhs)
+	{
+		return lhs.c == rhs.c;
+	}
+
+	template <typename T, typename Container>
+	bool operator< (const stack<T,Container>& lhs, const stack<T,Container>& rhs)
+	{
+		return lhs.c < rhs.c;
+	}
+
+	template <typename T, typename Container>
+	bool operator!=(const stack<T,Container>& lhs, const stack<T,Container>& rhs)
+	{
+		return !(lhs == rhs);
+	}
+
+	template <typename T, typename Container>
+	bool operator<=(const stack<T,Container>& lhs, const stack<T,Container>& rhs)
+	{
+		return !(rhs < lhs);
+	}
+
+	template <typename T, typename Container>
+	bool operator> (const stack<T,Container>& lhs, const stack<T,Container>& rhs)
+	{
+		return rhs < lhs;
+	}
+
+	template <typename T, typename Container>
+	bool operator>=(const stack<T,Container>& lhs, const stack<T,Container>& rhs)
+	{
+		return !(lhs < rhs);
+	}
 }
 
 #endif
