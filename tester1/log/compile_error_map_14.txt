@@ -1,0 +1,145 @@
+-MAP INSERT RANGE TEST-
+
+In file included from ./tmp/outfile_map_14.cpp:1:
+In file included from /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/iostream:37:
+In file included from /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/ios:215:
+In file included from /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/__locale:14:
+In file included from /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/string:504:
+In file included from /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/string_view:175:
+In file included from /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/__string:57:
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/algorithm:669:127: error: invalid operands to binary expression ('const std::__1::pair<const std::__1::basic_string<char>, int>' and 'const ft::pair<const std::__1::basic_string<char>, int>')
+    _LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX11 bool operator()(const _T1& __x, const _T2& __y) const {return __x == __y;}
+                                                                                                                          ~~~ ^  ~~~
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/algorithm:1262:14: note: in instantiation of member function 'std::__1::__equal_to<std::__1::pair<const std::__1::basic_string<char>, int>, ft::pair<const std::__1::basic_string<char>, int> >::operator()' requested here
+        if (!__pred(*__first1, *__first2))
+             ^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/algorithm:1275:19: note: in instantiation of function template specialization 'std::__1::equal<std::__1::__map_iterator<std::__1::__tree_iterator<std::__1::__value_type<std::__1::basic_string<char>, int>, std::__1::__tree_node<std::__1::__value_type<std::__1::basic_string<char>, int>, void *> *, long> >, ft::Rb_tree_iterator<ft::pair<const std::__1::basic_string<char>, int> >, std::__1::__equal_to<std::__1::pair<const std::__1::basic_string<char>, int>, ft::pair<const std::__1::basic_string<char>, int> > >' requested here
+    return _VSTD::equal(__first1, __last1, __first2, __equal_to<__v1, __v2>());
+                  ^
+./tmp/outfile_map_14.cpp:43:13: note: in instantiation of function template specialization 'std::__1::equal<std::__1::__map_iterator<std::__1::__tree_iterator<std::__1::__value_type<std::__1::basic_string<char>, int>, std::__1::__tree_node<std::__1::__value_type<std::__1::basic_string<char>, int>, void *> *, long> >, ft::Rb_tree_iterator<ft::pair<const std::__1::basic_string<char>, int> > >' requested here
+                if (!std::equal(v1_r.begin(),v1_r.end(),v2_r.begin()))
+                          ^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/system_error:390:1: note: candidate function not viable: no known conversion from 'const std::__1::pair<const std::__1::basic_string<char>, int>' to 'const std::__1::error_code' for 1st argument
+operator==(const error_code& __x, const error_code& __y) _NOEXCEPT
+^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/system_error:397:1: note: candidate function not viable: no known conversion from 'const std::__1::pair<const std::__1::basic_string<char>, int>' to 'const std::__1::error_code' for 1st argument
+operator==(const error_code& __x, const error_condition& __y) _NOEXCEPT
+^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/system_error:405:1: note: candidate function not viable: no known conversion from 'const std::__1::pair<const std::__1::basic_string<char>, int>' to 'const std::__1::error_condition' for 1st argument
+operator==(const error_condition& __x, const error_code& __y) _NOEXCEPT
+^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/system_error:412:1: note: candidate function not viable: no known conversion from 'const std::__1::pair<const std::__1::basic_string<char>, int>' to 'const std::__1::error_condition' for 1st argument
+operator==(const error_condition& __x, const error_condition& __y) _NOEXCEPT
+^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/utility:576:1: note: candidate template ignored: could not match 'std::__1::pair' against 'ft::pair'
+operator==(const pair<_T1,_T2>& __x, const pair<_T1,_T2>& __y)
+^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/iterator:807:1: note: candidate template ignored: could not match 'reverse_iterator' against 'pair'
+operator==(const reverse_iterator<_Iter1>& __x, const reverse_iterator<_Iter2>& __y)
+^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/iterator:1036:1: note: candidate template ignored: could not match 'istream_iterator' against 'pair'
+operator==(const istream_iterator<_Tp, _CharT, _Traits, _Distance>& __x,
+^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/iterator:1140:6: note: candidate template ignored: could not match 'istreambuf_iterator' against 'pair'
+bool operator==(const istreambuf_iterator<_CharT,_Traits>& __a,
+     ^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/iterator:1243:1: note: candidate template ignored: could not match 'move_iterator' against 'pair'
+operator==(const move_iterator<_Iter1>& __x, const move_iterator<_Iter2>& __y)
+^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/iterator:1615:1: note: candidate template ignored: could not match '__wrap_iter' against 'pair'
+operator==(const __wrap_iter<_Iter1>& __x, const __wrap_iter<_Iter2>& __y) _NOEXCEPT
+^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/memory:2042:6: note: candidate template ignored: could not match 'allocator' against 'pair'
+bool operator==(const allocator<_Tp>&, const allocator<_Up>&) _NOEXCEPT {return true;}
+     ^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/memory:2877:1: note: candidate template ignored: could not match 'unique_ptr' against 'pair'
+operator==(const unique_ptr<_T1, _D1>& __x, const unique_ptr<_T2, _D2>& __y) {return __x.get() == __y.get();}
+^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/memory:2913:1: note: candidate template ignored: could not match 'unique_ptr' against 'pair'
+operator==(const unique_ptr<_T1, _D1>& __x, nullptr_t) _NOEXCEPT
+^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/memory:2921:1: note: candidate template ignored: could not match 'unique_ptr' against 'pair'
+operator==(nullptr_t, const unique_ptr<_T1, _D1>& __x) _NOEXCEPT
+^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/memory:4426:1: note: candidate template ignored: could not match 'shared_ptr' against 'pair'
+operator==(const shared_ptr<_Tp>& __x, const shared_ptr<_Up>& __y) _NOEXCEPT
+^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/memory:4480:1: note: candidate template ignored: could not match 'shared_ptr' against 'pair'
+operator==(const shared_ptr<_Tp>& __x, nullptr_t) _NOEXCEPT
+^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/memory:4488:1: note: candidate template ignored: could not match 'shared_ptr' against 'pair'
+operator==(nullptr_t, const shared_ptr<_Tp>& __x) _NOEXCEPT
+^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/__functional_03:1568:1: note: candidate template ignored: could not match 'function' against 'pair'
+operator==(const function<_Fp>& __f, nullptr_t) {return !__f;}
+^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/__functional_03:1573:1: note: candidate template ignored: could not match 'function' against 'pair'
+operator==(nullptr_t, const function<_Fp>& __f) {return !__f;}
+^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/string_view:614:6: note: candidate template ignored: could not match 'basic_string_view' against 'pair'
+bool operator==(basic_string_view<_CharT, _Traits> __lhs,
+     ^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/string_view:623:6: note: candidate template ignored: could not match 'basic_string_view' against 'pair'
+bool operator==(basic_string_view<_CharT, _Traits> __lhs,
+     ^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/string_view:632:6: note: candidate template ignored: could not match 'basic_string_view' against 'pair'
+bool operator==(typename common_type<basic_string_view<_CharT, _Traits> >::type __lhs,
+     ^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/string:563:6: note: candidate template ignored: could not match 'fpos' against 'pair'
+bool operator==(const fpos<_StateT>& __x, const fpos<_StateT>& __y)
+     ^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/string:3850:1: note: candidate template ignored: could not match 'basic_string' against 'pair'
+operator==(const basic_string<_CharT, _Traits, _Allocator>& __lhs,
+^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/string:3862:1: note: candidate template ignored: could not match 'basic_string' against 'pair'
+operator==(const basic_string<char, char_traits<char>, _Allocator>& __lhs,
+^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/string:3881:1: note: candidate template ignored: could not match 'const _CharT *' against 'std::__1::pair<const std::__1::basic_string<char>, int>'
+operator==(const _CharT* __lhs,
+^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/string:3894:1: note: candidate template ignored: could not match 'basic_string' against 'pair'
+operator==(const basic_string<_CharT,_Traits,_Allocator>& __lhs,
+^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/map:1594:1: note: candidate template ignored: could not match 'map' against 'pair'
+operator==(const map<_Key, _Tp, _Compare, _Allocator>& __x,
+^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/map:2176:1: note: candidate template ignored: could not match 'multimap' against 'pair'
+operator==(const multimap<_Key, _Tp, _Compare, _Allocator>& __x,
+^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/vector:3335:1: note: candidate template ignored: could not match 'vector' against 'pair'
+operator==(const vector<_Tp, _Allocator>& __x, const vector<_Tp, _Allocator>& __y)
+^
+../iterator.hpp:164:7: note: candidate template ignored: could not match 'reverse_iterator' against 'pair'
+        bool operator==(const reverse_iterator<Iterator1> &lhs, const reverse_iterator<Iterator2> &rhs)
+             ^
+../iterator.hpp:334:7: note: candidate template ignored: could not match 'random_access_iterator' against 'pair'
+        bool operator==(const random_access_iterator<T1> &lhs, const random_access_iterator<T2> &rhs)
+             ^
+../pair.hpp:33:7: note: candidate template ignored: could not match 'ft::pair' against 'std::__1::pair'
+        bool operator==(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs)
+             ^
+../rb_tree.hpp:187:14: note: candidate template ignored: could not match 'Rb_tree_iterator' against 'pair'
+        inline bool     operator==(const Rb_tree_iterator<Value>& lhs, const Rb_tree_iterator<Value>& rhs)
+                        ^
+../rb_tree.hpp:298:14: note: candidate template ignored: could not match 'Rb_tree_const_iterator' against 'pair'
+        inline bool     operator==(const Rb_tree_const_iterator<Value> &rhs, const Rb_tree_const_iterator<Value> &lhs)
+                        ^
+../rb_tree.hpp:310:14: note: candidate template ignored: could not match 'Rb_tree_const_iterator' against 'pair'
+        inline bool     operator==(const Rb_tree_const_iterator<Value> &rhs, const Rb_tree_iterator<Value> &lhs)
+                        ^
+../rb_tree.hpp:322:14: note: candidate template ignored: could not match 'Rb_tree_iterator' against 'pair'
+        inline bool     operator==(const Rb_tree_iterator<Value> &rhs, const Rb_tree_const_iterator< Value> &lhs)
+                        ^
+../map.hpp:270:14: note: candidate template ignored: could not match 'map' against 'pair'
+        inline bool operator==(const map<Key, T, Compare, Alloc> &lhs, const map<Key, T, Compare, Alloc> &rhs)
+                    ^
+../set.hpp:208:2: note: candidate template ignored: could not match 'set' against 'pair'
+        operator==(const set<T, Compare, Alloc> &lhs, const set<T, Compare, Alloc> &rhs)
+        ^
+../vector.hpp:481:14: note: candidate template ignored: could not match 'vector' against 'pair'
+        inline bool operator==(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+                    ^
+../stack.hpp:69:7: note: candidate template ignored: could not match 'stack' against 'pair'
+        bool operator==(const stack<T, Container>& lhs, const stack<T,Container>& rhs)
+             ^
+1 error generated.

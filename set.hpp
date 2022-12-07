@@ -2,7 +2,6 @@
 #define SET_HPP
 
 #include "rb_tree.hpp"
-#include <functional>
 
 namespace ft
 {
@@ -94,6 +93,7 @@ namespace ft
 		/* ============================================================ */
 		/*                       Capacity                               */
 		/* ============================================================ */
+
 		bool empty() const
 		{
 			return _tree.empty();
@@ -110,7 +110,9 @@ namespace ft
 		}
 
 
-		// modifiers
+		/* ============================================================ */
+		/*                       Modifiers                              */
+		/* ============================================================ */
 		ft::pair<iterator, bool> insert(const value_type &val)
 		{
 			return _tree.insert(val);
@@ -152,7 +154,9 @@ namespace ft
 			_tree.clear();
 		}
 
-		// observers
+		/* ============================================================ */
+		/*                       Observers                              */
+		/* ============================================================ */
 		key_compare key_comp() const
 		{
 			return key_compare();
@@ -163,7 +167,9 @@ namespace ft
 			return _tree.value_comp();
 		}
 
-		// operations
+		/* ============================================================ */
+		/*                         Operations                           */
+		/* ============================================================ */
 		iterator find(const value_type &val) const
 		{
 			return _tree.find(val);
@@ -188,8 +194,9 @@ namespace ft
 			return _tree.equal_range(val);
 		}
 
-		// allocator
-
+		/* ============================================================ */
+		/*                         Allocator                            */
+		/* ============================================================ */
 		allocator_type get_allocator() const
 		{
 			return _tree.get_allocator();

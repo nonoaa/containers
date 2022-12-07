@@ -2,7 +2,6 @@
 #define MAP_HPP
 
 #include "rb_tree.hpp"
-#include <functional>
 
 namespace ft
 {
